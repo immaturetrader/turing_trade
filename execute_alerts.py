@@ -14,7 +14,7 @@ import datetime as dt
 from time import gmtime, strftime
 
 # Importing custom libraries
-
+   
 from turing_library.big_query_client import big_query
 from turing_library.alice_blue_execution import alice_blue_execution
 from turing_library.firestore_client import fire_store
