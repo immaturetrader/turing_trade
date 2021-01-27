@@ -1,0 +1,14 @@
+Flask==1.1.2
+requests==2.25.0
+ptvsd==4.3.2 # Required for debugging.
+telepot
+python-telegram-bot
+google-cloud-bigquery
+cloudstorage
+alice_blue
+firebase-admin
+oauth2client
+pandas_gbq
+google-cloud-pubsub
+
+dill

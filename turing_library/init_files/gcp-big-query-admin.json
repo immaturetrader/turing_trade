@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "boxwood-veld-298509",
+  "private_key_id": "afdbaac6e4e167ce41b54449b6eef5f8cb92cb69",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDVwUD1l1x3VzuP\nNDXRSOKLrT/T8fJDxqaofs1s0rFnLLcnD96h8fSv6dOgBvm8H/8kaF9hz7eWVpgb\ni6jbJSVqmxAwDlSVINlH9rY9JVHeE2IBdyBWV81YqzETTehrTsPmIX5O9mgNIv6S\ncRGxgHd0A4YrrvgS0P1fDmBaLC3CGFxrbA7RNH0ZJ691R6+k8eVTfNufrJqawccn\numim2QSN9D5ghcclfXuGdw2jzStk+VeUPnDGhHj1qXUgQl9EREJknsE4oIQiTf3T\n5FKNPu2Y8UN+LmNqKIAQj7rs+/Tj20c2ZkFRHz3i4vgatYr2Vn4gFnwj/ifexfdk\nlXpZkuITAgMBAAECggEAPDDnkGCXbpmXUWtzziOWe5uFEjMas8AgFOlkAkVQJEwA\npRTAbdzauKCA8ZqVP0bJS2DCnyHlQgXPXk5U9aS/pQXWKJoYckfmN2//ADfelkjh\n+6Sma/ncfp/yOUviazkqS8bZsPWM9koI4obJYzDYMkh9wxZJj87e0iITusCe//zl\nTe1OTnT/B3wPkrqpWf4nPaOZGZCp0MihqbbxEQXI64e4hvZkdH5n/f6uWoa75yiw\nRdqayw31PyX/Yqwxxsk8nf2yFELX/c58mYErEcAoy/vU5MUtSbVkyOS1wvkPHuIm\nLytgqTYOFWHxlOMRjR8IqChxs+BavhPG6y6/sN3hmQKBgQDzH7CZG9T8RQQB0zaX\neXrWqd5tCnQdHgQd59HGJfVc2pLAoPejjN3c2bln+79iFWhGHknyNCB4Eg+i79pO\nmHNHzaAyp9RteF+ZaqasV56FHTNLzXoKHkEuDwEULPEEjGO4wkdDznLQNsItoH0q\nwBtw4KeAC3p9PcUdsezh5G3xiwKBgQDhE2A8DZEWtyVOskJPnSVK8GjiBeYew2tR\nZMy8ACjbKxDsDjXYXsIyJFen2GkHtxzUQAscUIexHCdHo/yNHeKeT3daWGGMZJs+\numGQDp2QUJBWYsADqqAvXupia9s3z49KWgxAaeUuceLlDvXOH6cjXvL/yAAt9m0y\nhURoN11SmQKBgQDrHkN33k2cZdYZOby6wnWEMaT0SL7ABe4vSag5+y2NTafMeB7k\n4O8SjNBb+j88SL2dyd7zR2v7EmRiy5iQl6gs0XPSaTHraBTz1gs38khQLUwVS7Jx\nJI8eTs5ZR5kSL/6kh+XJclbge4RQAbvqYvxmrivujas4gUsmi5ItZu7YPwKBgQCe\nTVBsLGaVgW698OZutGocUQaToe5+SJfcgXb1627Q53NZc40vh0YymhkEtlL42DNw\nnTKzUXh+evytiIsCfbh7/AxIAM1rPv9pmRExjvYHIILEH2RJr+JGLw3O92kR0exI\nMRlY3KISjos069a6iMy3NfrXJ8Xojd+znsPEQNxkUQKBgQDVf3d6PwlM80HxL0eM\nCG7aD1RVvLWMOqEk1qrwmjMdzbRgjM/o8aRGnINPigHspo1+UCU8CtIc4T3qQYYd\nJ8Iw00lthn85iIoO0syojVxpsUBfXMgu/aEtqqdHgx1N7KMPBnny8opBwi9VjoQB\n+syWOz7Mi7K+I1NV9fMR2vJlAw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "biq-query-admin-role@boxwood-veld-298509.iam.gserviceaccount.com",
+  "client_id": "111254804734918816097",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/biq-query-admin-role%40boxwood-veld-298509.iam.gserviceaccount.com"
+}

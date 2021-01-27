@@ -1,0 +1,39 @@
+1363529369
+g4tleCEqW9
+LtMHbGwrnU_c0s7roHSDnOukhOxnuCSeTzEHQZThh5A.-h_9IIgdLARq_MmlAh1u6NLHdPHtnniEAm1VWMS6WYA
+
+mahadev
+GgFV7CgutA
+
+
+https://5f880bef6b9f.ngrok.io.ngrok.io/send_alerts_to_telegram?chat_id=626127126
+
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=626127126
+
+manoj
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=1363529369
+https://publish-message-to-pub-sub-iz6nlikcna-uc.a.run.app/publish_alerts_to_pub_sub
+
+mahadev
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=204184663
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=204184663
+
+channel
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=-1001288102699-g
+
+daddy
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=1416458850
+
+https://execute-chartink-alerts-iz6nlikcna-uc.a.run.app/send_alerts_to_telegram?chat_id=1416458850
+
+297666124153$Ai
+
+{
+    "stocks": "HDFC",
+    "trigger_prices": "1300",
+    "triggered_at": "2:34 pm",
+    "scan_name": "Short term breakouts",
+    "scan_url": "short-term-breakouts",
+    "alert_name": "Alert for Short term breakouts",
+    "webhook_url": "http://your-web-hook-url.com"
+}

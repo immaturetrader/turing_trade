@@ -1,0 +1,15 @@
+{
+ "source": {"telegram" : {"channel_type":"public","channel":"patelwealth","channel_id":"id"} },
+ "order": { "segment":"EQ/FUT/OPT","exchange":"NSE","scrip":"SBIN","transaction_type":"BUY/SELL/EXIT","order_type":"LMT/MKT","price": 280.0,"sl": 272.8,"target":290.0 },
+ "order_duration" : "POSITIONAL/INTRADAY/BTST" ,
+ "timestamp" :{"time":"YYYY-MM-DD 00:00:000","timezone":"+000"}
+}
+
+
+
+{
+ "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id} },
+ "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target },
+ "order_duration" : self.order_duration ,
+ "timestamp" :{"time":self.time,"timezone":self.timezone}
+}
