@@ -118,7 +118,8 @@ def execute_orders_from_telegram():
     print(f"Executing the below order for the client {chat_id}")
     data_str=request.data.decode('utf-8')
     #print(data_str)
-    json_data=json.loads(payload)    
+    #json_data=json.loads(data_str) # local
+    json_data=json.loads(payload)     # pub/sub
     print(json_data)
     print("Placing order to aliceblue")
     #alice,transaction_type_,order_type_,scrip,price,sl,qty

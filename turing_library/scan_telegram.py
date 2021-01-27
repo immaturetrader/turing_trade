@@ -104,7 +104,7 @@ class scan_telegram_channel():
      order.clean_message()
      order.extract_intents()
      print("Processed the message")
-     url = 'http://9ad3b6c5b6fe.ngrok.io/execute_alerts?chat_id=626127126'
+     url = 'http://06ade21bae0b.ngrok.io/execute_alerts?chat_id=626127126'
      #url_manoj = 'http://9ad3b6c5b6fe.ngrok.io/execute_alerts?chat_id=1363529369'
 
      #message = message_obj.message
@@ -124,8 +124,8 @@ class scan_telegram_channel():
       print("publishing message to pub/sub")
       ps_client.publish_message('telegram_alerts',json_paylod,False)
       print("successfully published message to pub/sub")
-      #x = requests.post(url_manoj, data = json_paylod)
-      #print("post request successfully sent to manoj")
+      #x = requests.post(url, data = json_paylod)
+      #print(f"post request successfully sent to {url}")
      else:
       print("No order found")
      return self.channel_id,message.id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message

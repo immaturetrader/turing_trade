@@ -133,7 +133,7 @@ class alice_blue_execution():
                      quantity = qty,
                      order_type = OrderType.StopLossLimit,
                      product_type = ProductType.Delivery,
-                     price = round(float(sl)-(0.001)*float(sl),2),
+                     price = float(sl),
                      trigger_price = float(sl),
                      stop_loss = None,
                      square_off = None,
@@ -165,7 +165,7 @@ class alice_blue_execution():
                      quantity = qty,
                      order_type = OrderType.StopLossLimit,
                      product_type = ProductType.Delivery,
-                         price = sl-0.1,
+                         price = sl,
                      trigger_price = sl,
                      stop_loss = None,
                      square_off = None,
@@ -246,6 +246,32 @@ class alice_blue_execution():
                      is_amo = False)
 
      return "Sell order placed",'',
+ 
+  elif transaction_type_ == 'SELL' and order_type_ == 'MKT' :
+     sell_order=  alice.place_order(transaction_type = TransactionType.Sell,
+                     instrument = alice.get_instrument_by_symbol('NSE', scrip),
+                     quantity = qty,
+                     order_type = OrderType.Market,
+                     product_type = ProductType.Intraday,
+                     price = 0.0,
+                     trigger_price = None,
+                     stop_loss = None,
+                     square_off = None,
+                     trailing_sl = None,
+                     is_amo = False)
+     stop_loss_order = alice.place_order(transaction_type = TransactionType.Sell,
+                     instrument = alice.get_instrument_by_symbol('NSE', scrip),
+                     quantity = qty,
+                     order_type = OrderType.StopLossLimit,
+                     product_type = ProductType.Delivery,
+                     price = sl,
+                     trigger_price = sl+0.1,
+                     stop_loss = None,
+                     square_off = None,
+                     trailing_sl = None,
+                     is_amo = False)
+
+     return "Sell order placed",'',    
  
   elif transaction_type_ == 'EXIT' and order_type_ == 'MKT' :
      sell_order=  alice.place_order(transaction_type = TransactionType.Sell,
