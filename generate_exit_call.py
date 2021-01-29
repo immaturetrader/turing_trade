@@ -14,6 +14,8 @@ from flask import Flask, render_template, request
 import re
 import platform
 
+new_dir = os.getcwd()
+os.chdir(new_dir)
 
 from turing_library.big_query_client import big_query
 from turing_library.alice_blue_execution import alice_blue_execution

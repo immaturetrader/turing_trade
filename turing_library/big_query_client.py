@@ -4,6 +4,10 @@ from google.oauth2 import service_account
 import cloudstorage as gcs
 #from google.appengine.api import app_identity
 from pathlib import Path
+import os
+
+new_dir = os.getcwd()
+os.chdir(new_dir)
 
 class big_query():
 

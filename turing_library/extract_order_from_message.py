@@ -14,11 +14,16 @@ global scrip_list
 import datetime
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+import datetime as dt
+from time import gmtime, strftime
+import copy
 
 #print("current directory",os.getcwd())
 new_dir = os.getcwd()
 os.chdir(new_dir)
 #print("new directory",os.getcwd())
+from turing_library.firestore_client import fire_store
+fs=fire_store()
 
 class order_details():
     print("Initialized order details")
@@ -44,9 +49,22 @@ class order_details():
     message=None
     reply_m_id=0
     reply_to_message=None
-
+    
+    scan_name=None
+    scan_url=None
+    alert_name=None
+    webhook_url=None
+    
     def __init__(self,source):
         self.source = source
+        if self.source == 'chartink':
+            self.chartink_order= {
+                "source": {"chartink" : {"scan_name":self.scan_name,"scan_url":self.scan_url,"alert_name":self.alert_name,"webhook_url":self.webhook_url,"m_timestamp":self.m_timestamp} },
+                "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target },
+                "order_duration" : self.order_duration ,
+                "timestamp" :{"time":self.time,"timezone":self.timezone}
+                }
+            self.chartink_orders=[]
 
     def clean_message(self):
         self.message = ' ' + str(self.message)
@@ -72,8 +90,74 @@ class order_details():
 
         elif self.source == 'chartink':
            self.source = 'chartink'
-           return {"source": "chartink"}
+           return   
+           
+    def check_for_chartink_alert(self,alert):
+        num_of_orders=0
+        #orders=[]
+        #today=dt.datetime.now()
+        
+        scrips=alert['stocks'].split(',')
+        trigger_prices = alert["trigger_prices"].split(',')
+        trigger_time_s=alert['triggered_at']
+        
+        self.chartink_order['source']['chartink']['scan_name']=alert['scan_name']
+        self.chartink_order['source']['chartink']['scan_url']=alert['scan_url']
+        self.chartink_order['source']['chartink']['alert_name']=alert['alert_name']
+        self.chartink_order['source']['chartink']['webhook_url']=alert['webhook_url']
+        self.chartink_order['source']['chartink']['m_timestamp']=self.transform_time_string(trigger_time_s)
+        
+        self.chartink_order['order']['exchange']='NSE'
+        scan_data=fs.get_chartink_alert_data(alert['scan_name'])
+        if scan_data :
+            self.chartink_order['order']['order_type']=scan_data['order_type']
+        
+        
+        
+        while num_of_orders<len(scrips):
+               
+               order=copy.deepcopy(self.chartink_order)
+               #orders.append([scrips[num_of_orders],float(trigger_prices[num_of_orders])])
+               order['order']['scrip']=scrips[num_of_orders]
+               order['order']['price']=float(trigger_prices[num_of_orders])
+               order['order']['sl']=round(order['order']['price']*0.99,1)
+               order['order']['transaction_type']='MKT'               
+               num_of_orders=num_of_orders+1
+               self.chartink_orders.append(order)
 
+            
+        
+        trigger_time_s=trigger_time_s.replace(' ','')
+        print(trigger_time_s)
+
+
+    def transform_time_string(self,trigger_time_s):
+        today=dt.datetime.now()
+        trigger_time_s=trigger_time_s.replace(' ','')
+        if 'am' in trigger_time_s:
+            trigger_time_s=trigger_time_s.replace('am','')
+            trigger_time=str(trigger_time_s).split(':')
+            trigger_hours=int(trigger_time[0])
+        else:
+            trigger_time_s=trigger_time_s.replace('pm','')
+            trigger_time=str(trigger_time_s).split(':')
+            trigger_hours=int(trigger_time[0]) + 12
+        trigger_minutes=int(trigger_time[1])
+        trigger_time=dt.datetime(today.year, today.month, today.day, trigger_hours, trigger_minutes, 0, 0)
+        print("Trigger time",trigger_time)
+        time_zone=(strftime("%z", gmtime()))
+        time_zone_values = re.findall("(\d.)",time_zone)
+        hours_added = dt.timedelta(hours = (int(time_zone_values[0]) + int(time_zone_values[1])/60))
+        if time_zone=='+0530':
+           hours_added = 0
+           trigger_time_adjusted = trigger_time
+           return trigger_time_adjusted
+        else:
+           #hours_added=-hours_added 
+           trigger_time_adjusted = trigger_time - hours_added  
+           return trigger_time_adjusted
+        
+        
     def check_for_order(self,regex_expr):
         params=re.findall(regex_expr,self.message)
               #print(params)

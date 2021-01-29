@@ -18,6 +18,9 @@ from turing_library.alice_blue import *
 #import big_query_client
 import pickle
 
+new_dir = os.getcwd()
+os.chdir(new_dir)
+
 class alice_blue_execution():
 
  def __init__(self,fs,chat_id):

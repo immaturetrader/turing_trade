@@ -8,6 +8,8 @@ from turing_library.alice_blue_execution import alice_blue_execution
 from turing_library.firestore_client import fire_store
 from google.cloud import storage
 
+new_dir = os.getcwd()
+os.chdir(new_dir)
 
 storage_client = storage.Client()
 bucket_name='turing-trades'

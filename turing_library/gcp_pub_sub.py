@@ -4,8 +4,15 @@ Created on Fri Dec 18 14:20:18 2020
 
 @author: sravula
 """
-
+import os
 from google.cloud import pubsub_v1
+from turing_library.firestore_client import fire_store
+
+
+new_dir = os.getcwd()
+os.chdir(new_dir)
+
+fs=fire_store()
 
 class pub_sub():
     def __init__(self):
@@ -16,6 +23,24 @@ class pub_sub():
 
     def create_topic(self,topic_id): 
         return self.publisher.create_topic(request={"name": self.publisher.topic_path(self.project_id, topic_id)})
+    
+    def create_subscription_to_a_topic(self,topic_id,chat_id):
+        end_point=fs.get_end_point_of_a_topic(topic_id)
+        end_point=end_point+str(chat_id)
+        topic_path = self.publisher.topic_path(self.project_id, topic_id)
+        subscription_path = self.subscriber.subscription_path(self.project_id, topic_id + '-' + str(chat_id))
+        push_config=pubsub_v1.types.PushConfig(push_endpoint=end_point)
+        self.subscriber.create_subscription(
+                        request={"name": subscription_path, "topic": topic_path, "push_config":push_config,"ack_deadline_seconds":240 }
+                        )
+
+        print(f"Subscription created: {subscription_path}")
+        
+        
+    def delete_subcription_from_a_topic(self,topic_id,chat_id):
+        subscription_path = self.subscriber.subscription_path(self.project_id, topic_id + '-' + str(chat_id))
+        self.subscriber.delete_subscription(request={"subscription":subscription_path})
+        print(f"Subscription deleted: {subscription_path}.")
  
     def publish_message(self,topic_id,message,bytes_message):
         topic_path = self.publisher.topic_path(self.project_id, topic_id)
@@ -42,5 +67,8 @@ class pub_sub():
                     request={"subscription": subscription, "update_mask": update_mask}
                     )
             print(result)
+            
+            
+
 
 

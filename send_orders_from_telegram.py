@@ -24,13 +24,16 @@ from turing_library.firestore_client import fire_store
 from turing_library.big_query_client import big_query
 from turing_library.scan_telegram import scan_telegram_channel
 
+new_dir = os.getcwd()
+os.chdir(new_dir)
+
 channel=sys.argv[1]
-scan_telegram_c = scan_telegram_channel(channel)         
+scan_telegram_c = scan_telegram_channel(channel)
 def start_scanning():
     
     if scan_telegram_c.channel_id:
      print(f"Listening to the channnel {scan_telegram_c.channel_id}")
-     loop = asyncio.get_event_loop() 
+     loop = asyncio.get_event_loop()
      print("Syncing the database with old telegram messages")
      loop.run_until_complete(scan_telegram_c.get_telegram_channel_data())
      print("Syncing the database done")

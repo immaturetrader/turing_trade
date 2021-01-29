@@ -5,6 +5,9 @@ from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 import os
 
+new_dir = os.getcwd()
+os.chdir(new_dir)
+
 #app = Flask(__name__)
 credentials = GoogleCredentials.get_application_default()
 

@@ -9,12 +9,14 @@ import requests
 import telepot
 import telegram
 from flask import Flask, render_template, request
+from turing_library.gcp_pub_sub import pub_sub
 #from alice_blue import *
 import re
 import platform
 
-
-
+new_dir = os.getcwd()
+os.chdir(new_dir)
+ps=pub_sub()
 def set_telegram_webhook(bot_token,url):
      print(f"Setting webhook to {url}")
      telepot.Bot(bot_token).setWebhook(url=url)
@@ -155,17 +157,6 @@ def hello():
             order_type_='MKT'
             price=None
             sl=None
-#            buy_order=  alice.place_order(transaction_type = TransactionType.Buy,
-#            instrument = alice.get_instrument_by_symbol('NSE', scrip),
-#            quantity = qty,
-#            order_type = OrderType.Market,
-#            product_type = ProductType.Delivery,
-#            price = 0.0,
-#            trigger_price = None,
-#            stop_loss = None,
-#            square_off = None,
-#            trailing_sl = None,
-#            is_amo = False)
             alice_blue_auto_bot.place_order(alice,transaction_type_,order_type_,scrip,price,sl,qty)
             print("Buy order placed successfully")
             send_chat_message("Buy order placed successfully")
@@ -221,6 +212,23 @@ def hello():
 
     elif text_message.lower() == 'token':
       TelegramBot.sendMessage(chat_id=chat_id, text=bq.access_token)
+      
+    elif text_message.lower() == 'start telegram alerts':
+         ps.create_subscription_to_a_topic('telegram_alerts',chat_id)
+         TelegramBot.sendMessage(chat_id,"At your command, looking for telegram alerts")
+         
+    elif text_message.lower() == 'stop telegram alerts':
+         ps.delete_subcription_from_a_topic('telegram_alerts',chat_id)
+         TelegramBot.sendMessage(chat_id,"Yes, stopped telegram alerts")
+         
+    elif text_message.lower() == 'start chartink alerts':
+         ps.create_subscription_to_a_topic('chart_ink_alerts',chat_id)
+         TelegramBot.sendMessage(chat_id,"At your command, looking for chartink alerts")
+         
+    elif text_message.lower() == 'stop chartink alerts':
+         ps.delete_subcription_from_a_topic('chart_ink_alerts',chat_id)
+         TelegramBot.sendMessage(chat_id,"Yes, stopped chartink alerts")         
+         
     else:
       TelegramBot.sendMessage(chat_id=chat_id, text='Could not recognize the command')
       return 'Success'
