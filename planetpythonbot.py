@@ -22,7 +22,7 @@ def set_telegram_webhook(bot_token,url):
      telepot.Bot(bot_token).setWebhook(url=url)
 
 ########################################Ngrok only for local#########################################
-if platform.system() == 'Windows':
+if platform.system() == 'Windowss':
  from pyngrok import ngrok
  http_tunnel = ngrok.connect(8080)
  url = http_tunnel.public_url
@@ -79,7 +79,7 @@ def get_the_alice_object(alice_blue_auto_bot,chat_id):
                user_details=fs.fetch_user_creds(chat_id)
                if fs.user_registered=='Y':
                 print("generating client")
-                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'])
+                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE'])
                 alice_broker_objects[chat_id]=alice
                 print("added alice user object to the dict")
                 return alice
@@ -90,7 +90,7 @@ def get_the_alice_object(alice_blue_auto_bot,chat_id):
                user_details=fs.fetch_user_creds(chat_id)
                if fs.user_registered=='Y':
                 print("generating client")
-                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'])
+                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE'])
                 print("adding alice user object to the dict")
                 alice_broker_objects[chat_id]=alice
                 return alice
