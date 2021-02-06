@@ -23,6 +23,14 @@ new_dir = os.getcwd()
 os.chdir(new_dir)
 #print("new directory",os.getcwd())
 
+
+# generate string for the session
+
+
+#async with TelegramClient(StringSession(),'1339277', '5fdc451937e250be8997cd103ca4c541',) as client:
+#    print(client.session.save())
+    
+    
 ps_client=pub_sub()
 
 bot_token = '1021528417:AAGAkVTbfg11PfEYcBflltMg1vT0SiOnK4E'

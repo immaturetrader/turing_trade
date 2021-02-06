@@ -31,7 +31,7 @@ from turing_library.cache import cache
 # url=url.replace('http','https')
 # print(url)
 #else:
-# url='https://planetpythonbot-iz6nlikcna-el.a.run.app'   
+# url='https://execute-alerts-iz6nlikcna-el.a.run.app'   
 ########################################Ngrok only for local#########################################
 
 
@@ -131,7 +131,7 @@ def execute_orders_from_telegram():
     scrip=json_data['order']['scrip']
     #"order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target },
     print(f"Placing order with qty {qty}")
-    alice_blue_auto_bot.place_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],1)
+    alice_blue_auto_bot.place_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],qty)
     send_chat_message(chat_id,f"Buy order placed successfully for the scrip {scrip}")
     positions_message = alice_blue_auto_bot.get_positions(alice)
     send_chat_message(chat_id,f"Positions after the buy order \n{positions_message}")     
