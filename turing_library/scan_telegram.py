@@ -135,7 +135,9 @@ class scan_telegram_channel():
          #client_parameters={"chat_id":param}
       if order.order_found:
        #x = requests.post(url, data = json_paylod)
-       send_chat_message('-1001288102699-g',order_json)
+       send_chat_message('-1001288102699-g',order_json)       
+       order_json['order_closed']='N'
+       fs.insert_order(order_json)
        if order_json['order']['segment'] == 'EQ':
         print("publishing message to pub/sub")   
         ps_client.publish_message('telegram_alerts',json_payload,False)

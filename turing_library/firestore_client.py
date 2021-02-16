@@ -64,6 +64,7 @@ class fire_store():
         self.telegram_admin_table=u'telegram_admin'
         self.telegram_scan_channels=u'telegram_scan_channels'
         self.open_positions=u'open_positions'
+        self.orders=u'orders'
         self.telegram_phone='+919502418868'
         self.client = firestore.client()
         self.chat_id = ''
@@ -73,6 +74,15 @@ class fire_store():
         self.pub_sub = u'pub_sub'
         print("Initialized firestore client")
 
+
+    def get_all_user_chats(self):
+        user_data=self.client.collection(self.user_table).stream()
+        #print(poss)
+        users= [pos.to_dict() for pos in user_data ]
+        #print(positions)
+        return users
+    
+        
     def fetch_user_creds(self,chat_id):
         self.chat_id=chat_id
         self.user_registered = 'N'
@@ -161,9 +171,18 @@ class fire_store():
             print("No record found in the database")
             
             
-    def insert_open_positions(self,chat_id,execution_type,nse_scrip,execution_price,sl,qty):
-         self.chat_id=chat_id
-         user_docs = self.client.collection(self.user_table).add({u'chat_id':chat_id,u'telegram_username':telegram_username,u'broker':broker,u'client_id':client_id,u'password':password,u'twoFA':twoFA,u'api_secret':api_secret,u'access_token':access_token})
+    def insert_order(self,order):
+         #self.chat_id=chat_id
+         if order:
+          self.client.collection(self.orders).add(order)
+          
+          
+    def get_orders(self):
+        poss=self.client.collection(self.orders).stream()
+        #print(poss)
+        positions= [pos.to_dict() for pos in poss ]
+        #print(positions)
+        return positions      
 
     def get_chartink_alert_data(self,alert_name):
         docs = self.client.collection(self.chartink_scans).stream()

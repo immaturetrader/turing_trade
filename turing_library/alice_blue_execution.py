@@ -67,6 +67,19 @@ class alice_blue_execution():
      message_l=message_l + "\n" + message
     return message_l
 
+ def get_positions_json(self,alice):
+    poss=alice.get_daywise_positions()['data']['positions']
+    p=0
+    poss_j=[]
+    for pos in poss:
+     #print(pos)
+     if pos:
+      #print("position",pos)   
+      #p=round(float(pos['unrealised_pnl'])+float(pos['realised_pnl']),2)
+      poss_j= poss.append(pos)
+
+    return poss_j
+
  def get_pending_order_of_a_scrip(self,alice,scrip):
      pending_orders=alice.get_order_history()['data']['pending_orders']
      print(pending_orders)
