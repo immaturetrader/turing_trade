@@ -39,13 +39,14 @@ class alice_blue_execution():
  def generate_client(self,username,password,twoFA,api_secret,access_token,app_id,master_contracts_to_download):
   try:
    print("generating the client with existing token")
-   self.alice = AliceBlue(username=username, password=password, access_token=access_token,app_id=app_id)
+   self.alice = AliceBlue(username=username, password=password, access_token=access_token,app_id=app_id,master_contracts_to_download=master_contracts_to_download)
 #   with open("AB126971.alice", "wb") as f:
 #    pickle.dump(self.alice, f, pickle.HIGHEST_PROTOCOL)
    return self.alice
   except:
    print("Unable to login using the current access token, regenerating new one")
    access_token = self.generate_access_token(username,password,twoFA,api_secret,app_id)
+   print(access_token)
    self.alice = AliceBlue(username=username, password=password, access_token=access_token,app_id=app_id,master_contracts_to_download=master_contracts_to_download)
    self.fs.update_access_token(self.chat_id,access_token)
 #   with open("AB126971.alice", "wb") as f:
@@ -106,6 +107,44 @@ class alice_blue_execution():
       else:
        self.modify_sl_of_scrip(alice,sl_order,scrip,sl,m_qty)
 
+ def place_fno_order(self,alice,transaction_type_,order_type_,scrip,price,sl,qty,expiry_date,is_fut,strike,is_CE):
+     fno_instrument=alice.get_instrument_for_fno(symbol = scrip, expiry_date=expiry_date, is_fut=is_fut, strike=strike, is_CE = is_CE)
+     print("Placing option order")
+     buy_order=alice.place_order(transaction_type = TransactionType.Buy,
+                     instrument = fno_instrument,
+                     quantity = qty*int(fno_instrument.lot_size),
+                     order_type = OrderType.Market,
+                     product_type = ProductType.Delivery,
+                     price = 0.0,
+                     trigger_price = None,
+                     stop_loss = None,
+                     square_off = None,
+                     trailing_sl = None,
+                     is_amo = False)
+     
+     time.sleep(0.1)
+     order_start_time = time.time()
+     buy_order_hist=alice.get_order_history(buy_order['data']['oms_order_id'])
+     while alice.get_order_history(buy_order['data']['oms_order_id'])['data'][0]['order_status'] != 'complete':
+        time.sleep(1)
+        print("Order getting filled...",end="\r")
+        seconds = int(time.time() - order_start_time)
+        if seconds>20:
+           break 
+     if sl:  
+      stop_loss_order = alice.place_order(transaction_type = TransactionType.Sell,
+                     instrument = fno_instrument,
+                     quantity = qty*int(fno_instrument.lot_size),
+                     order_type = OrderType.StopLossLimit,
+                     product_type = ProductType.Delivery,
+                     price = float(sl),
+                     trigger_price = float(sl),
+                     stop_loss = None,
+                     square_off = None,
+                     trailing_sl = None,
+                     is_amo = False)
+      print(f"Stoploss order,f{stop_loss_order}")
+     
  def place_order(self,alice,transaction_type_,order_type_,scrip,price,sl,qty):
     
   if (transaction_type_ == 'BUY' and order_type_ == 'MKT'):

@@ -77,7 +77,7 @@ class cache():
                user_details=self.fs.fetch_user_creds(chat_id)
                if self.fs.user_registered=='Y':
                 print("generating client")
-                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE'])
+                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE','NFO'])
                 alice_broker_objects[chat_id]=alice
                 print("added alice user object to the dict")
 #                with open(f'{chat_id}.alice', 'wb') as alice_file:
@@ -85,7 +85,7 @@ class cache():
 #                    dill.dump(alice, alice_file)
 #                    print("dumped the alice dill object successfully")
                 print("adding alice user object to the dict and dumping the object to gcp")
-                bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')        
+                #bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')        
                 print("dumped alice user object to gcp")
                 return alice,alice_broker_objects
                else:
@@ -96,14 +96,14 @@ class cache():
                user_details=self.fs.fetch_user_creds(chat_id)
                if self.fs.user_registered=='Y':
                 print("generating client")
-                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE'])
+                alice = alice_blue_auto_bot.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE','NFO'])
                 print("adding alice user object to the dict and dumping the object to gcp")
 #                with open(f'{chat_id}.alice', 'wb') as alice_file:
 #                    print("dumping the alice dill object")
 #                    dill.dump(alice, alice_file)
 #                    print("dumped the alice dill object successfully")                 
                     
-                bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')    
+                #bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')    
                 print("dumped alice user object to gcp")
                 alice_broker_objects[chat_id]=alice
                 return alice,alice_broker_objects

@@ -129,10 +129,28 @@ def execute_orders_from_telegram():
     qty,s_l=get_trade_qty(fs,chat_id,json_data['order']['price'])
     time.sleep(s_l)
     scrip=json_data['order']['scrip']
+    segment=json_data['order']['segment']
+    exchange=json_data['order']['exchange']
+    
     #"order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target },
     print(f"Placing order with qty {qty}")
-    alice_blue_auto_bot.place_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],qty)
-    send_chat_message(chat_id,f"Buy order placed successfully for the scrip {scrip}")
+    if segment == 'EQ':
+     alice_blue_auto_bot.place_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],qty)
+     send_chat_message(chat_id,f"Buy order placed successfully for the scrip {scrip}")
+    elif segment == 'OPT':
+     expiry_date_list=json_data['order']['expiry_date']
+     print(expiry_date_list)
+     expiry_date=dt.date(expiry_date_list[0],expiry_date_list[1],expiry_date_list[2])
+     print(expiry_date)
+     qty=1
+     is_fut=json_data['order']['is_fut']
+     strike=json_data['order']['strike']
+     is_CE=json_data['order']['is_CE']
+     print("is ce",is_CE)
+     #scrip,s_l,qty,expiry_date,is_fut,strike,is_CE
+     alice_blue_auto_bot.place_fno_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],qty,expiry_date,is_fut,strike,is_CE)
+     send_chat_message(chat_id,f"Buy order placed successfully for the option {scrip}")   
+     
     positions_message = alice_blue_auto_bot.get_positions(alice)
     send_chat_message(chat_id,f"Positions after the buy order \n{positions_message}")     
     #send_chat_message(chat_id,)

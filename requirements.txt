@@ -10,5 +10,4 @@ firebase-admin
 oauth2client
 pandas_gbq
 google-cloud-pubsub
-
 dill

@@ -97,6 +97,8 @@ def main():
 
     print(open_positions)
 
+	#Instead of for loop of all the stocks, check for the bucket order
+	
     while True :
      print("checking for the target price")
      sleep(1)

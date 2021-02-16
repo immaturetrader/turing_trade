@@ -21,6 +21,7 @@ import requests
 #print("current directory",os.getcwd())
 new_dir = os.getcwd()
 os.chdir(new_dir)
+fs=fire_store()
 #print("new directory",os.getcwd())
 
 
@@ -45,12 +46,11 @@ class scan_telegram_channel():
 
  def __init__(self,channel_id):
      print("Initializing scan_telegram_channel class")
-     self.fs=fire_store()
      self.bq=big_query('66127126')
      self.channel_id=channel_id
 
 
-     telegram_creds=self.fs.fetch_telegram_admin_creds()
+     telegram_creds=fs.fetch_telegram_admin_creds()
      self.api_id = telegram_creds['api_id']
      self.api_hash = telegram_creds['api_hash']
      self.string_session=telegram_creds['channel_strings'][self.channel_id]['session_string']
@@ -108,7 +108,7 @@ class scan_telegram_channel():
 
      order.message=m_message
      order.m_id=message.id
-     print(order.__dict__())
+     #print(order.__dict__())
      order.clean_message()
      order.extract_intents()
      print("Processed the message")
@@ -120,22 +120,35 @@ class scan_telegram_channel():
      reply_to_message=''
      reply_to_msg_id=''
      #write_to_bigquery(bigquery_client, channel_id,message.id,message.date.strftime("%m/%d/%Y, %H:%M:%S"),m_message,reply_to_msg_id,reply_to_message)
-     print("inserted the data to big query")
-     self.bq.insert_into_messages(order.channel,order.m_id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message)
      print(f"Posting the request to the url {url}")
-     json_paylod = json.dumps(order.__dict__())
-     print(f"Broadcasting the order message to client {url}")
-        #json_paylod = { f''' "telegram_message": "{m_message}"'''}
-        #client_parameters={"chat_id":param}
-     if order.order_found:
-      #x = requests.post(url, data = json_paylod)
-      print("publishing message to pub/sub")
-      ps_client.publish_message('telegram_alerts',json_paylod,False)
-      print("successfully published message to pub/sub")
+     #print(order.__dict__())
+     for j_order in order.__dict__():
+      print(j_order)   
+      json_payload = json.dumps(j_order)
+      print(type(json_payload))
+      order_json=json.loads(json_payload)
+      order_json['source']['telegram']['channel']=''
+      order_json['source']['telegram']['channel_id']=''
+      
+      print(f"Broadcasting the order message to client {url}")
+         #json_paylod = { f''' "telegram_message": "{m_message}"'''}
+         #client_parameters={"chat_id":param}
+      if order.order_found:
+       #x = requests.post(url, data = json_paylod)
+       send_chat_message('-1001288102699-g',order_json)
+       if order_json['order']['segment'] == 'EQ':
+        print("publishing message to pub/sub")   
+        ps_client.publish_message('telegram_alerts',json_payload,False)
+        print("successfully published message to pub/sub")
+       
       #x = requests.post(url, data = json_paylod)
       #print(f"post request successfully sent to {url}")
-     else:
-      print("No order found")
+      else:
+       print("No order found")
+      
+     print("Inserting the message to big query")
+     self.bq.insert_into_messages(order.channel,order.m_id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message)
+     print("inserted the message to big query") 
      return self.channel_id,message.id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message
      #print(x.text)
     await client.start()

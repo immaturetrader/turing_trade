@@ -1,3 +1,3 @@
 #!/usr/bin/env python
-sudo chmod +x /home/turingtrades/python-bot-auto-orders_optimize_new/send_orders_from_telegram.py
+sudo chmod +x /home/turingtrades/turing_trade/send_orders_from_telegram.py
 sudo env PYTHONPATH="/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7/site-packages:/home/turingtrades/.pyenv/versions/3.7.4/lib/python37.zip:/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7:/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7/lib-dynload" nohup python /home/turingtrades/turing_trade/send_orders_from_telegram.py PATELWEALTH & sudo env PYTHONPATH="/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7/site-packages:/home/turingtrades/.pyenv/versions/3.7.4/lib/python37.zip:/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7:/home/turingtrades/.pyenv/versions/3.7.4/lib/python3.7/lib-dynload" nohup python /home/turingtrades/turing_trade/send_orders_from_telegram.py rajdattani
