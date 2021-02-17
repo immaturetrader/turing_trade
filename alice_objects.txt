@@ -1,10 +1,17 @@
+from turing_library.alice_blue_execution import alice_blue_execution
+from turing_library.firestore_client import fire_store
+from turing_library.alice_blue import AliceBlue, TransactionType, OrderType, ProductType, LiveFeedType, Instrument
+
+fs=fire_store()
+chat_id=626127126
+alice_blue_auto_bot=alice_blue_execution(fs,chat_id)
 username='AB126971'
 password='397666124153$Ai'
 twoFA='abc'
-access_token='XJKcqOn7jS7s82gGVarDlR0O5dis036buD2KsH11pZ8.wenZXknMjn6ZWUl5ETgEjugn1pPVYZtcMRXpc_jue0U'
+access_token='2v0BDOmQiwXm6ElN5hC_UZ8jPSeLBFNcmP9MdFUlFV4.88O_QPFF7shbabwlM1rzPo-TQyncEK7LeLvFxYHEEEw'
 api_secret='4HXSLRXA22V1YSE24UTQUNPGOCHM8CUWA9PNDJT80QY427UFG6LCGPWQ1QDIJLBZ'
 app_id='AB126971'
-master_contracts_to_download=['NFO']
+master_contracts_to_download=['NFO','NSE']
 alice=alice_blue_auto_bot.generate_client(username,password,twoFA,api_secret,access_token,app_id,master_contracts_to_download)
 
 

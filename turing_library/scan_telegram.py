@@ -108,6 +108,7 @@ class scan_telegram_channel():
 
      order.message=m_message
      order.m_id=message.id
+     order.m_timestamp=message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")
      #print(order.__dict__())
      order.clean_message()
      order.extract_intents()

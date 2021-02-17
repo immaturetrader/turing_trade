@@ -68,9 +68,9 @@ for order in orders:
 
 users = fs.get_all_user_chats()    
 
-users=[(user['chat_id'],user['trigger_orders']) for user in users if 'trigger_orders' in user.keys()]
+user_details=[(user['chat_id'],user['trigger_orders']) for user in users if 'trigger_orders' in user.keys()]
 
-for user in users:
+for user in user_details:
     chat_id=user[0]
     if user[1]=='Y':
      alice_blue_auto_bot=alice_blue_execution(fs,chat_id)
@@ -79,9 +79,9 @@ for user in users:
      rec={}
      #print(poss)
      for pos in poss:
-      rec['chat_id']=chat_id
-      rec['chat_id']['positions']=pos      
-      fs.client.collection('orders').add(rec)
+      rec={'chat_id':chat_id,'positions':pos}
+      #rec['chat_id']['positions']=pos      
+      fs.client.collection('client_positions').add(rec)
      
     
     

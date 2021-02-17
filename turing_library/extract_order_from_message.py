@@ -15,7 +15,9 @@ from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import datetime as dt
 import datetime
+import time
 from time import gmtime, strftime
+from datetime import datetime as dt_time
 import copy
 #print("current directory",os.getcwd())
 new_dir = os.getcwd()
@@ -29,8 +31,9 @@ chat_id=626127126
 alice_admin=alice_blue_execution(fs,chat_id)
 
 user_details=fs.fetch_user_creds(chat_id)
-
+scrip_market_data = {}
 alice=alice_admin.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE','NFO'])
+from time import gmtime, strftime
 
 def open_web_socket(alice):
   global socket_opened
@@ -52,6 +55,7 @@ def event_handler_quote_update(message):
     latest_ask_price=message['ask_prices'][0]
     subscribed_scrip=message['instrument'][2]
     latest_bid_price=message['bid_prices'][0]
+    scrip_market_data[subscribed_scrip]={'ask':message['ask_prices'][0] , 'bid': message['bid_prices'][0]}
     print(subscribed_scrip,latest_ask_price,latest_bid_price)
     print(message)
     #print(message)
@@ -67,40 +71,61 @@ open_web_socket(alice)
 def unsubscribe_if_any(exchange,alice):
     print("unsubscribing if any")
     subs=alice.get_all_subscriptions()
+    #subs.
+    print(subs)
+    sub_list=[]
+    for sub in subs:
+        sub_list.append(sub)
+    for sub_i in sub_list:    
+      alice.unsubscribe(sub,LiveFeedType.SNAPQUOTE)  
     symbols=[]
-    while subs:
-     print("Existing subscriptions present")   
-     for sub in subs.keys():
-      symbols.append(sub.symbol)
-     for symbol in symbols: 
-      print(f"Unsubscribing from {symbol}")   
-      alice.unsubscribe(alice.get_instrument_by_symbol(exchange,symbol), LiveFeedType.SNAPQUOTE)    
+#    for sub in subs:
+#      alice.unsubscribe(sub, LiveFeedType.SNAPQUOTE)  
+    #if exchange == 'NSE':
+    #alice.unsubscribe([alice.get_instrument_by_symbol('NSE', 'TATASTEEL'), alice.get_instrument_by_symbol('NSE', 'ACC')], LiveFeedType.MARKET_DATA)
+#    while subs:
+#      print("Existing subscriptions present")   
+#      for sub in subs.keys():
+#       symbols.append(sub.symbol)
+#      for symbol in symbols: 
+#       print(f"Unsubscribing from {symbol}")   
+#       alice.unsubscribe(alice.get_instrument_by_symbol(exchange,symbol), LiveFeedType.SNAPQUOTE)
+#     #else:
+         
+         
 
 def check_the_price_for_cash_stock(alice,exchange,scrip):
  print(f"checking the market price for {scrip}")   
- #unsubscribe_if_any(exchange,alice)
+ unsubscribe_if_any(exchange,alice)
  global latest_ask_price
  global latest_bid_price
  global subscribed_scrip
  latest_ask_price=0
  latest_bid_price=0
- subscribed_scrip=''
+ subscribed_scrip=scrip
  global socket_opened
  while(socket_opened==False):    # wait till socket open & then subscribe
         #print("# wait till socket open & then subscribe")
         pass
  print("Subscribing to the feed") 
  alice.subscribe(alice.get_instrument_by_symbol(exchange,scrip), LiveFeedType.SNAPQUOTE)
+ #time.sleep(0.3)
+ dt=datetime.datetime.now()
+ if dt.hour > 9 and dt.hour < 16:
+     time.sleep(0.1)
+ else:
+     time.sleep(0.7)
+ return latest_ask_price,latest_bid_price
  
 def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE):
  print(f"checking the market price for {scrip}")   
- #unsubscribe_if_any(exchange,alice)
+ unsubscribe_if_any(exchange,alice)
  global latest_ask_price
  global latest_bid_price
  global subscribed_scrip
  latest_ask_price=0
  latest_bid_price=0
- subscribed_scrip=''
+ subscribed_scrip=scrip
  global socket_opened
  while(socket_opened==False):    # wait till socket open & then subscribe
         #print("# wait till socket open & then subscribe")
@@ -108,7 +133,14 @@ def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE
  print("Subscribing to the feed") 
  alice.subscribe(alice.get_instrument_for_fno(symbol = scrip, expiry_date=expiry_date, is_fut=is_fut, strike=strike, is_CE = is_CE), LiveFeedType.SNAPQUOTE)   
      
- print("Subscribed to the feed")   
+ print("Subscribed to the feed") 
+ #time.sleep(0.3)
+ dt=datetime.datetime.now()
+ if dt.hour > 9 and dt.hour < 16:
+     time.sleep(0.1)
+ else:
+     time.sleep(0.7)
+ return latest_ask_price,latest_bid_price
  
  
 class order_details():
@@ -116,6 +148,7 @@ class order_details():
     order_found=False
     channel_type = None
     channel = None
+    
     channel_id = None
     segment = None
     exchange = None
@@ -148,7 +181,13 @@ class order_details():
     alert_name=None
     webhook_url=None
     
+    timezone = time_zone=(strftime("%z", gmtime()))
+    time = None
+    cash_ask_price=0.0
+    cash_bid_price=0.0
     
+    nfo_ask_price=0.0
+    nfo_bid_price=0.0
     
     def __init__(self,source):
         self.source = source
@@ -232,28 +271,18 @@ class order_details():
      self.exchange='NFO'
      self.expiry_date = final_desired_symbol.expiry
      instrument=final_desired_symbol
-#     NFO_Order_Dict = {
-#       "exchange": "NFO",
-#       "scrip": scrip,         
-#       "transaction_type":"BUY",
-#       "order_type":"INTRA DAY",
-#        "symbol":final_desired_symbol.symbol,
-#       "expiry":final_desired_symbol.expiry,
-#       "lot_size":final_desired_symbol.lot_size,
-#       "stop_loss":order_dict['order']['sl'],
-#       "token":final_desired_symbol.token,
-#        "alice_instrument": final_desired_symbol
-#     }
-#     return NFO_Order_Dict
-     
+     if self.expiry_date:
+      self.nfo_bid_price,self.nfo_ask_price=check_the_price_for_fno(alice,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
     def get_orders(self):
         pass
     
     def __dict__(self):
+        #tm=dt_time.now()
+        self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         if self.source == 'telegram':
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"market_price":self.market_price },
+                "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.cash_bid_price,"ask_price":self.cash_ask_price},
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 } 
@@ -264,7 +293,7 @@ class order_details():
                 self.is_fut=False
                 order_opt={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"market_price":self.market_price},
+                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"bid_price":self.nfo_bid_price,"ask_price":self.nfo_ask_price},
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }
@@ -272,10 +301,10 @@ class order_details():
            else:
                 return[{
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"market_price":self.market_price },
+                "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.bid_price,"ask_price":self.ask_price },
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
-                }] 
+                }]
                     
                
 
@@ -375,7 +404,7 @@ class order_details():
                self.expiry_date=self.last_thursday_of_week(today)
                print("expiry date successfully retrieved")
                print("Order Found",self.order_found)
-               check_the_price_for_fno(alice,self.exchange,self.scrip,self.expiry_date,self.is_fut,self.strike,self.is_CE)
+               self.nfo_ask_price,self.nfo_bid_price=check_the_price_for_fno(alice,self.exchange,self.scrip,self.expiry_date,self.is_fut,self.strike,self.is_CE)
                #scrip,price,sl,qty,,is_fut,strike,is_CE
                
     def check_for_order(self,regex_expr):
@@ -411,7 +440,7 @@ class order_details():
                   self.scrip= nse_scrip_code
                   self.scrip_name=nse_scrip_name
                   self.order_found=True
-                  check_the_price_for_cash_stock(alice,self.exchange,self.scrip)
+                  self.cash_ask_price,self.cash_bid_price=check_the_price_for_cash_stock(alice,self.exchange,self.scrip)
                else:
                   self.order_found=False
 
@@ -427,17 +456,17 @@ class order_details():
                  
            elif self.channel in ['PATELWEALTH','test26021994']:
                 print("checking for buy order")
-                self.extract_from_patel_wealth("(.+)BUY (.+) @ (\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                self.extract_from_patel_wealth("(.+)BUY (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
                 self.transaction_type = 'BUY'
                 print("order_found",self.order_found)
                 if not self.order_found:
                     print("checking for sell order")
-                    self.extract_from_patel_wealth("(.+)SELL (.+) @ (\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    self.extract_from_patel_wealth("(.+)SELL (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
                     self.transaction_type = 'SELL'
                     print("Sell order found",self.order_found)
                 if not self.order_found:  # check for bank nifty trade
                     print("checking for option order")
-                    self.check_for_option_order("(.+)BUY (BANK NIFTY) (\d*) (.+) @ (\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    self.check_for_option_order("(.+)BUY (BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
                     self.transaction_type = 'BUY' 
                     print(self.__dict__())
 
@@ -464,6 +493,7 @@ class order_details():
                 if nse_scrip:
                  self.scrip=nse_scrip
                  self.order_found=True
+                 self.cash_ask_price,self.cash_bid_price=check_the_price_for_cash_stock(alice,self.exchange,self.scrip)
                  print("order_found",self.order_found)
                  if self.is_fut:
                     self.check_for_option_for_fut(self.scrip,self.price) 
