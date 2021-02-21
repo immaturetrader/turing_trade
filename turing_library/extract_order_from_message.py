@@ -278,22 +278,35 @@ class order_details():
     
     def __dict__(self):
         #tm=dt_time.now()
+        print("getting the order dict")
+        print(f"getting order for {self.segment} and is_fut {self.is_fut}")
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         if self.source == 'telegram':
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.cash_bid_price,"ask_price":self.cash_ask_price},
+                "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.cash_bid_price,"ask_price":self.cash_ask_price,"trade_closed":"N"},
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
-                } 
-           #print("order_eq",order_eq)
-           if not self.is_fut:
+                }
+           
+           print("order_eq",order_eq)
+           if self.segment=='EQ' and not self.is_fut:
                 return [order_eq]
-           elif self.is_fut:    
-                self.is_fut=False
+           elif self.exchange == 'NFO' and not self.is_fut:
+                print(f"getting order for {self.segment} and is_fut {self.is_fut}")
                 order_opt={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"bid_price":self.nfo_bid_price,"ask_price":self.nfo_ask_price},
+                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"bid_price":self.nfo_bid_price,"ask_price":self.nfo_ask_price,"trade_closed":"N"},
+                "order_duration" : self.order_duration ,
+                "timestamp" :{"time":self.time,"timezone":self.timezone}
+                }
+                return [order_opt]
+           elif self.exchange == 'NFO' and self.is_fut:    
+                self.is_fut=False
+                print(f"getting order for {self.segment} and is_fut {self.is_fut}")
+                order_opt={
+                "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
+                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"bid_price":self.nfo_bid_price,"ask_price":self.nfo_ask_price,"trade_closed":"N"},
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }
@@ -301,7 +314,7 @@ class order_details():
            else:
                 return[{
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
-                "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.bid_price,"ask_price":self.ask_price },
+                "order": { "segment":self.segment,"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.bid_price,"ask_price":self.ask_price,"trade_closed":"N" },
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }]
@@ -311,6 +324,9 @@ class order_details():
         elif self.source == 'chartink':
            self.source = 'chartink'
            return   
+       
+        else:
+            return 
            
     def check_for_chartink_alert(self,alert):
         num_of_orders=0
@@ -386,16 +402,17 @@ class order_details():
                self.segment = 'OPT'
                self.is_fut=False
                self.order_type=params[0][0]
+               self.transaction_type=params[0][1]
                self.scrip='BANKNIFTY'
-               self.strike=float(params[0][2])
+               self.strike=float(params[0][3])
                is_CE=None
-               if params[0][3] == 'CALL':
+               if params[0][4] == 'CALL':
                   is_CE=True
-               elif params[0][3] == 'PUT':
+               elif params[0][4] == 'PUT':
                   is_CE=False
                   
                self.is_CE = is_CE
-               self.sl=float(params[0][5])
+               self.sl=float(params[0][6])
                self.order_found=True
                print("Order Found",self.order_found)
                print("Checking for expiry date")
@@ -415,9 +432,10 @@ class order_details():
                self.exchange='NSE'
                self.segment = 'EQ'
                self.order_type=params[0][0]
-               self.scrip=params[0][1]
-               self.price=float(params[0][2])
-               self.sl=float(params[0][3])
+               self.transaction_type=params[0][1]
+               self.scrip=params[0][2]
+               self.price=float(params[0][3])
+               self.sl=float(params[0][4])
 
 
                if 'FUTURE' in self.order_type:
@@ -448,26 +466,28 @@ class order_details():
         if self.message:
            if self.channel in ['rajdattani','at_test_incoming_0901']:
               if not self.order_found:
-               self.check_for_order("(.+)BUY ([A-Z]+ ?[A-Z]+ ?[A-Z]+ ?) @(\d*\.?\d*)-?\d*.?\d* SL (\d*\.?\d*)")
-               self.transaction_type = 'BUY'
-              if not self.order_found:
-               self.check_for_order("(.+)SELL ([A-Z]+ ?[A-Z]+ ?[A-Z]+ ?) @(\d*\.?\d*)-?\d*.?\d* SL (\d*\.?\d*)")
-               self.transaction_type = 'SELL'
+               self.check_for_order("(.+) (BUY|SELL) ([A-Z]+ ?[A-Z]+ ?[A-Z]+ ?) @(\d*\.?\d*)-?\d*.?\d* SL (\d*\.?\d*)")
+#               self.transaction_type = 'BUY'
+#              if not self.order_found:
+#               self.check_for_order("(.+)SELL ([A-Z]+ ?[A-Z]+ ?[A-Z]+ ?) @(\d*\.?\d*)-?\d*.?\d* SL (\d*\.?\d*)")
+#               self.transaction_type = 'SELL'
                  
            elif self.channel in ['PATELWEALTH','test26021994']:
-                print("checking for buy order")
-                self.extract_from_patel_wealth("(.+)BUY (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
-                self.transaction_type = 'BUY'
-                print("order_found",self.order_found)
+               
                 if not self.order_found:
-                    print("checking for sell order")
-                    self.extract_from_patel_wealth("(.+)SELL (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
-                    self.transaction_type = 'SELL'
-                    print("Sell order found",self.order_found)
+                    print("checking for buy order")
+                    self.extract_from_patel_wealth("(.+) (BUY|SELL) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+#                    self.transaction_type = 'BUY'
+#                print("order_found",self.order_found)
+#                if not self.order_found:
+#                    print("checking for sell order")
+#                    self.extract_from_patel_wealth("(.+)SELL (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+#                    self.transaction_type = 'SELL'
+#                    print("Sell order found",self.order_found)
                 if not self.order_found:  # check for bank nifty trade
-                    print("checking for option order")
-                    self.check_for_option_order("(.+)BUY (BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
-                    self.transaction_type = 'BUY' 
+                    print("checking for bank nifty option order")
+                    self.check_for_option_order("(.+) (BUY|SELL) (BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    #self.transaction_type = 'BUY' 
                     print(self.__dict__())
 
         else:
@@ -482,14 +502,15 @@ class order_details():
                 self.exchange='NSE'
                 self.segment = 'EQ'
                 self.order_type=params[0][0]
-                self.scrip=params[0][1]
+                self.transaction_type = params[0][1]
+                self.scrip=params[0][2]
                 if 'FUT' in self.scrip:
                    self.is_fut=True
                 self.scrip=self.scrip.replace('ON NSE CASH','').replace('FUT','').replace('CASH','').replace('/','').strip()
                 if self.scrip:
                  nse_scrip,nse_scrip_name=self.check_for_the_scrip(self.scrip)
-                self.price=float(params[0][2])
-                self.sl=float(params[0][3])
+                self.price=float(params[0][3])
+                self.sl=float(params[0][4])
                 if nse_scrip:
                  self.scrip=nse_scrip
                  self.order_found=True

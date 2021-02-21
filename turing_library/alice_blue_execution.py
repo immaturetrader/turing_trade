@@ -114,7 +114,14 @@ class alice_blue_execution():
  def place_fno_order(self,alice,transaction_type_,order_type_,scrip,price,sl,qty,expiry_date,is_fut,strike,is_CE):
      fno_instrument=alice.get_instrument_for_fno(symbol = scrip, expiry_date=expiry_date, is_fut=is_fut, strike=strike, is_CE = is_CE)
      print("Placing option order")
-     buy_order=alice.place_order(transaction_type = TransactionType.Buy,
+     if transaction_type_ == 'BUY':
+         order_transaction_type = TransactionType.Buy
+         sl_order_transaction_type = TransactionType.Sell 
+     elif transaction_type_ == 'SELL':
+         order_transaction_type = TransactionType.Sell
+         sl_order_transaction_type = TransactionType.Buy          
+         
+     order=alice.place_order(transaction_type = order_transaction_type,
                      instrument = fno_instrument,
                      quantity = qty*int(fno_instrument.lot_size),
                      order_type = OrderType.Market,
@@ -128,15 +135,15 @@ class alice_blue_execution():
      
      time.sleep(0.1)
      order_start_time = time.time()
-     buy_order_hist=alice.get_order_history(buy_order['data']['oms_order_id'])
-     while alice.get_order_history(buy_order['data']['oms_order_id'])['data'][0]['order_status'] != 'complete':
+     buy_order_hist=alice.get_order_history(order['data']['oms_order_id'])
+     while alice.get_order_history(order['data']['oms_order_id'])['data'][0]['order_status'] != 'complete':
         time.sleep(1)
         print("Order getting filled...",end="\r")
         seconds = int(time.time() - order_start_time)
         if seconds>20:
            break 
      if sl:  
-      stop_loss_order = alice.place_order(transaction_type = TransactionType.Sell,
+      stop_loss_order = alice.place_order(transaction_type = sl_order_transaction_type,
                      instrument = fno_instrument,
                      quantity = qty*int(fno_instrument.lot_size),
                      order_type = OrderType.StopLossLimit,
@@ -279,7 +286,7 @@ class alice_blue_execution():
                      square_off = None,
                      trailing_sl = None,
                      is_amo = False)
-     stop_loss_order = alice.place_order(transaction_type = TransactionType.Sell,
+     stop_loss_order = alice.place_order(transaction_type = TransactionType.Buy,
                      instrument = alice.get_instrument_by_symbol('NSE', scrip),
                      quantity = qty,
                      order_type = OrderType.StopLossLimit,
@@ -305,7 +312,7 @@ class alice_blue_execution():
                      square_off = None,
                      trailing_sl = None,
                      is_amo = False)
-     stop_loss_order = alice.place_order(transaction_type = TransactionType.Sell,
+     stop_loss_order = alice.place_order(transaction_type = TransactionType.Buy,
                      instrument = alice.get_instrument_by_symbol('NSE', scrip),
                      quantity = qty,
                      order_type = OrderType.StopLossLimit,

@@ -18,6 +18,7 @@ os.chdir(new_dir)
 #firebase_admin.initialize_app(cred)
 #db = firestore.client()
 # https://firebase.google.com/docs/firestore/query-data/listen
+
 def get_updates_on_doc(table_name,doc_id):
  callback_done = threading.Event()
  
@@ -157,15 +158,16 @@ class fire_store():
     
     
 
-    def update_open_positions(self,chat_id,trade_closed_value):
-        self.chat_id=chat_id
-        user_docs = self.client.collection(self.open_positions).where(u'chat_id',u'==',self.chat_id)
+    def update_orders(self,scrip,segment,trade_closed_value):
+        #self.chat_id=chat_id
+        user_docs = self.client.collection(self.orders).where(u'order.scrip',u'==',scrip).where(u'order.segment',u'==',segment)
         user_docs_stream = user_docs.stream()
         document_id = [doc.id for doc in user_docs_stream]
         if document_id:
             document_id = document_id[0]
+            print("document id",document_id)
             print("Updating open positions")
-            user_docs = self.client.collection(self.open_positions).document(f'{document_id}').update({u'trade_closed':trade_closed_value})
+            user_docs = self.client.collection(self.orders).document(f'{document_id}').update({u'order.trade_closed':trade_closed_value})
             print("Updated successfully in the database")
         else:
             print("No record found in the database")
