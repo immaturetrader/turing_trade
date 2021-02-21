@@ -114,7 +114,7 @@ def check_the_price_for_cash_stock(alice,exchange,scrip):
  if dt.hour > 9 and dt.hour < 16:
      time.sleep(0.1)
  else:
-     time.sleep(0.7)
+     time.sleep(0.1)
  return latest_ask_price,latest_bid_price
  
 def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE):
@@ -139,7 +139,7 @@ def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE
  if dt.hour > 9 and dt.hour < 16:
      time.sleep(0.1)
  else:
-     time.sleep(0.7)
+     time.sleep(0.1)
  return latest_ask_price,latest_bid_price
  
  
