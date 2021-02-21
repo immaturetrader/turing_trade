@@ -85,7 +85,7 @@ class cache():
 #                    dill.dump(alice, alice_file)
 #                    print("dumped the alice dill object successfully")
                 print("adding alice user object to the dict and dumping the object to gcp")
-                #bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')        
+                bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')        
                 print("dumped alice user object to gcp")
                 return alice,alice_broker_objects
                else:
@@ -103,7 +103,7 @@ class cache():
 #                    dill.dump(alice, alice_file)
 #                    print("dumped the alice dill object successfully")                 
                     
-                #bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')    
+                bucket.blob(source_blob_name).upload_from_string(data=dill.dumps(alice),content_type='application/octet-stream')    
                 print("dumped alice user object to gcp")
                 alice_broker_objects[chat_id]=alice
                 return alice,alice_broker_objects
