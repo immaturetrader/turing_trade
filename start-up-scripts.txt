@@ -1,0 +1,5 @@
+#! /bin/bash
+chmod +x /home/turingtrades/auto_trades_old_version/start.sh
+chmod +x /home/turingtrades/turing_trade/start_telegram_alerts.sh
+chmod +x /home/turingtrades/turing_trade/deploy_cloud_run_1.sh
+sh /home/turingtrades/auto_trades_old_version/start.sh & sh /home/turingtrades/turing_trade/deploy_cloud_run_1.sh

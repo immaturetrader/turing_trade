@@ -112,9 +112,9 @@ def check_the_price_for_cash_stock(alice,exchange,scrip):
  #time.sleep(0.3)
  dt=datetime.datetime.now()
  if dt.hour > 9 and dt.hour < 16:
-     time.sleep(0.1)
+     time.sleep(0.3)
  else:
-     time.sleep(0.1)
+     time.sleep(0.3)
  return latest_ask_price,latest_bid_price
  
 def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE):
@@ -137,9 +137,9 @@ def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE
  #time.sleep(0.3)
  dt=datetime.datetime.now()
  if dt.hour > 9 and dt.hour < 16:
-     time.sleep(0.1)
+     time.sleep(0.3)
  else:
-     time.sleep(0.1)
+     time.sleep(0.3)
  return latest_ask_price,latest_bid_price
  
  
@@ -281,6 +281,7 @@ class order_details():
         print("getting the order dict")
         print(f"getting order for {self.segment} and is_fut {self.is_fut}")
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
+        unsubscribe_if_any('NSE',alice)
         if self.source == 'telegram':
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
@@ -486,7 +487,7 @@ class order_details():
 #                    print("Sell order found",self.order_found)
                 if not self.order_found:  # check for bank nifty trade
                     print("checking for bank nifty option order")
-                    self.check_for_option_order("(.+) (BUY|SELL) (BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    self.check_for_option_order("(.+) (BUY) (BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
                     #self.transaction_type = 'BUY' 
                     print(self.__dict__())
 

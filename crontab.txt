@@ -1,0 +1,1 @@
+# */3 * * * * /home/turingtrades/turing_trade/start_telegram_alerts.sh > /home/turingtrades/turing_trade/cron.log 2>&1
