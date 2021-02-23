@@ -1,2 +1,5 @@
 https://github.com/saikiran0901/turing_trade.git
-
+git config --global user.email "saikiran@github.com"
+git config --global user.name "Sai Kiran"
+git commit -am "change from Linux"
+git push https://github.com/saikiran0901/turing_trade.git master
