@@ -2,6 +2,9 @@ Flask==1.1.2
 requests==2.25.0
 ptvsd==4.3.2 # Required for debugging.
 telepot
+telethon
+regex
+fuzzywuzzy
 python-telegram-bot
 google-cloud-bigquery
 cloudstorage

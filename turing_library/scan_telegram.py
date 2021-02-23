@@ -123,31 +123,32 @@ class scan_telegram_channel():
      #write_to_bigquery(bigquery_client, channel_id,message.id,message.date.strftime("%m/%d/%Y, %H:%M:%S"),m_message,reply_to_msg_id,reply_to_message)
      print(f"Posting the request to the url {url}")
      #print(order.__dict__())
-     for j_order in order.__dict__():
-      print(j_order)   
-      json_payload = json.dumps(j_order)
-      print(type(json_payload))
-      order_json=json.loads(json_payload)
-      order_json['source']['telegram']['channel']=''
-      order_json['source']['telegram']['channel_id']=''
-      
-      print(f"Broadcasting the order message to client {url}")
-         #json_paylod = { f''' "telegram_message": "{m_message}"'''}
-         #client_parameters={"chat_id":param}
-      if order.order_found:
-       #x = requests.post(url, data = json_paylod)
-       send_chat_message('-1001288102699-g',order_json)       
-       order_json['order_closed']='N'
-       fs.insert_order(order_json)
-       if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
-        print("publishing message to pub/sub")   
-        ps_client.publish_message('telegram_alerts',json_payload,False)
-        print("successfully published message to pub/sub")
+     if order.order_found:
+      for j_order in order.__dict__():
+       print(j_order)   
+       json_payload = json.dumps(j_order)
+       print(type(json_payload))
+       order_json=json.loads(json_payload)
+       order_json['source']['telegram']['channel']=''
+       order_json['source']['telegram']['channel_id']=''
        
-      #x = requests.post(url, data = json_paylod)
-      #print(f"post request successfully sent to {url}")
-      else:
-       print("No order found")
+       print(f"Broadcasting the order message to client {url}")
+          #json_paylod = { f''' "telegram_message": "{m_message}"'''}
+          #client_parameters={"chat_id":param}
+       if order.order_found:
+         #x = requests.post(url, data = json_paylod)
+        send_chat_message('-1001288102699-g',order_json)       
+        order_json['order_closed']='N'
+        fs.insert_order(order_json)
+        if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
+         print("publishing message to pub/sub")   
+         ps_client.publish_message('telegram_alerts',json_payload,False)
+         print("successfully published message to pub/sub")
+        
+       #x = requests.post(url, data = json_paylod)
+       #print(f"post request successfully sent to {url}")
+       else:
+        print("No order found")
       
      print("Inserting the message to big query")
      self.bq.insert_into_messages(order.channel,order.m_id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message)

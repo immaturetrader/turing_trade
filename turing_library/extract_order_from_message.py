@@ -282,7 +282,7 @@ class order_details():
         print(f"getting order for {self.segment} and is_fut {self.is_fut}")
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         unsubscribe_if_any('NSE',alice)
-        if self.source == 'telegram':
+        if self.source == 'telegram' and self.order_found:
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
                 "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"bid_price":self.cash_bid_price,"ask_price":self.cash_ask_price,"trade_closed":"N"},
@@ -324,7 +324,7 @@ class order_details():
 
         elif self.source == 'chartink':
            self.source = 'chartink'
-           return   
+           return 
        
         else:
             return 
