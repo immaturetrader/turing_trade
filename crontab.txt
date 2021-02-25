@@ -1,1 +1,2 @@
 # */3 * * * * /home/turingtrades/turing_trade/start_telegram_alerts.sh > /home/turingtrades/turing_trade/cron.log 2>&1
+# */2 * * * * /home/turingtrades/turing_trades/update_cache.py > /home/turingtrades/turing_trades/cron_logs/update_cache.log 2>&1

@@ -30,16 +30,22 @@ fs=fire_store()
 
 #async with TelegramClient(StringSession(),'1339277', '5fdc451937e250be8997cd103ca4c541',) as client:
 #    print(client.session.save())
-    
-    
+
+
 ps_client=pub_sub()
 
 bot_token = '1021528417:AAGAkVTbfg11PfEYcBflltMg1vT0SiOnK4E'
 TelegramBot = telepot.Bot(bot_token)
 
 def send_chat_message(chat_id,text):
-    TelegramBot.sendMessage(chat_id=chat_id, text=text)
-    return "Success"
+    try:
+     TelegramBot.sendMessage(chat_id=chat_id, text=text)
+     return "Success"
+    except:
+     print("Error while sending the message, retrying again")
+     TelegramBot.sendMessage(chat_id=chat_id, text=text)
+     return "Success"
+
 
 print("running scan telegram")
 class scan_telegram_channel():
@@ -125,34 +131,34 @@ class scan_telegram_channel():
      #print(order.__dict__())
      if order.order_found:
       for j_order in order.__dict__():
-       print(j_order)   
+       print(j_order)
        json_payload = json.dumps(j_order)
        print(type(json_payload))
        order_json=json.loads(json_payload)
        order_json['source']['telegram']['channel']=''
        order_json['source']['telegram']['channel_id']=''
-       
+
        print(f"Broadcasting the order message to client {url}")
           #json_paylod = { f''' "telegram_message": "{m_message}"'''}
           #client_parameters={"chat_id":param}
        if order.order_found:
          #x = requests.post(url, data = json_paylod)
-        send_chat_message('-1001288102699-g',order_json)       
+        send_chat_message('-1001288102699-g',order_json)
         order_json['order_closed']='N'
         fs.insert_order(order_json)
         if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
-         print("publishing message to pub/sub")   
+         print("publishing message to pub/sub")
          ps_client.publish_message('telegram_alerts',json_payload,False)
          print("successfully published message to pub/sub")
-        
+
        #x = requests.post(url, data = json_paylod)
        #print(f"post request successfully sent to {url}")
        else:
         print("No order found")
-      
+
      print("Inserting the message to big query")
      self.bq.insert_into_messages(order.channel,order.m_id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message)
-     print("inserted the message to big query") 
+     print("inserted the message to big query")
      return self.channel_id,message.id,pd.Timestamp(message.date.strftime("%Y-%m-%d %H:%M:%S+00:00")),m_message,reply_to_msg_id,reply_to_message
      #print(x.text)
     await client.start()
