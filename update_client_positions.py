@@ -12,6 +12,7 @@ import platform
 from datetime import datetime
 import datetime as dt
 from time import gmtime, strftime
+from datetime import datetime as dt
 
 # Importing custom libraries
 new_dir = os.getcwd()
@@ -79,7 +80,8 @@ for user in user_details:
      rec={}
      #print(poss)
      for pos in poss:
-      rec={'chat_id':chat_id,'positions':pos}
+      print(pos)   
+      rec={'date_w_id':int(dt.today().strftime("%Y%m%d")),'broker':'aliceblue','client_id':pos['client_id'],'chat_id':chat_id,'position':pos}
       #rec['chat_id']['positions']=pos      
       fs.client.collection('client_positions').add(rec)
      
