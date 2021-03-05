@@ -1,0 +1,7 @@
+Deploying container to Cloud Run service [execute-alerts] in project [boxwood-veld-298509] region [asia-south1]
+Deploying...
+Creating Revision.....................................................................................................done
+Routing traffic......done
+Done.
+Service [execute-alerts] revision [execute-alerts-00048-nor] has been deployed and is serving 100 percent of traffic.
+Service URL: https://execute-alerts-iz6nlikcna-el.a.run.app

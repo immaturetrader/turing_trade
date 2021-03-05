@@ -1,0 +1,31 @@
+Initialized firestore client
+Getting the alice object
+trying to get profile from existing alice dill object in gcp storage
+Unable to get profile with existing alice object
+getting users creds from db for chat 204184663
+got the user creds
+OQiQ9asIIClt1tMr7LnQ => {'twoFA': 'abc', 'password': 'ACIP10061970', 'app_id': 'GgFV7CgutA', 's_l': 0, 'chat_id': 204184663, 'client_id': '195330', 'telegram_username': 'mahadev', 'api_secret': 'tAQY4OOT6HiREWEd96ZWWxJD9LUkl4mcOH6syXF8vUUWqaUQJb6J8fD9tXuyv03M', 'trigger_orders': 'Y', 'trade_amount': 1000, 'access_token': '8CDgGYv6_DGs88RemKdjAtmRpQ5Hid8SJwOZCR75lJ4.5mkp2nuboITESOPBRU5rugyPkHofLb1VcPpSanwl9JM', 'broker': 'aliceblue'}
+generating client
+generating the client with existing token
+Unable to login using the current access token, regenerating new one
+Access token generated XVq5NbBEo4hMIb9ktWs5acwd7nwS5pgSCEPbD2hZ-yc.cW_5NZ8X760xsvW2KA0M6e-siL_Idbv5x9ijjUMyrmY
+XVq5NbBEo4hMIb9ktWs5acwd7nwS5pgSCEPbD2hZ-yc.cW_5NZ8X760xsvW2KA0M6e-siL_Idbv5x9ijjUMyrmY
+Updating access token
+Access token updated successfully in the database
+adding alice user object to the dict and dumping the object to gcp
+dumped alice user object to gcp
+Getting the alice object
+trying to get profile from existing alice dill object in gcp storage
+Unable to get profile with existing alice object
+getting users creds from db for chat 626127126
+got the user creds
+aHFKbGHrmYzmxN91liHb => {'trigger_orders': 'Y', 'twoFA': 'abc', 'broker': 'aliceblue', 'app_id': 'AB126971', 'telegram_username': 'sai_kiran_0901', 'password': '397666124153$Ai', 'trade_amount': 15000, 's_l': 0, 'chat_id': 626127126, 'client_id': 'AB126971', 'take_profit_per': 1, 'access_token': '9w6SY0S2DMkyTJMOt7Ou7Ub-eSVlUnKhRCPQJs1amo8.ySxNb4JLc5UZqZtC0AWxe0PXW8xr9WLX33J0und9Hk0', 'take_profit_amount': 2, 'api_secret': '4HXSLRXA22V1YSE24UTQUNPGOCHM8CUWA9PNDJT80QY427UFG6LCGPWQ1QDIJLBZ'}
+generating client
+generating the client with existing token
+Unable to login using the current access token, regenerating new one
+Access token generated -joC8x_a9nVOFzCtrkuQHxBG77oMzonv5d4ihH6A1TQ.AnYyIncVur4NH72gEroKzDaPCvHiv6EnYQukln2aepo
+-joC8x_a9nVOFzCtrkuQHxBG77oMzonv5d4ihH6A1TQ.AnYyIncVur4NH72gEroKzDaPCvHiv6EnYQukln2aepo
+Updating access token
+Access token updated successfully in the database
+adding alice user object to the dict and dumping the object to gcp
+dumped alice user object to gcp

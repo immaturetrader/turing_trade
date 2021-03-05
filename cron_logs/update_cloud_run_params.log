@@ -1,0 +1,6 @@
+Deploying...
+Creating Revision...............................................................................................................................done
+Routing traffic........................................................................................................................done
+Done.
+Service [execute-alerts] revision [execute-alerts-00065-dad] has been deployed and is serving 100 percent of traffic.
+Service URL: https://execute-alerts-iz6nlikcna-el.a.run.app

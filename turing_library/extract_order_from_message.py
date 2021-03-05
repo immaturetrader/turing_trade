@@ -282,6 +282,7 @@ class order_details():
         print(f"getting order for {self.segment} and is_fut {self.is_fut}")
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         unsubscribe_if_any('NSE',alice)
+        unsubscribe_if_any('NSE',alice)
         if self.source == 'telegram' and self.order_found:
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },

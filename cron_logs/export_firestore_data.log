@@ -1,0 +1,60 @@
+metadata:
+  '@type': type.googleapis.com/google.firestore.admin.v1.ExportDocumentsMetadata
+  collectionIds:
+  - orders
+  - client_positions
+  operationState: PROCESSING
+  outputUriPrefix: gs://firestore_exports_101/export-01
+  startTime: '2021-03-04T12:25:02.232171Z'
+name: projects/boxwood-veld-298509/databases/(default)/operations/ASA0MTAwNTY5MjMJGnRsdWFmZWQHEjFzLXNhLXNib2otbmltZGEQCigS
+Waiting for [projects/boxwood-veld-298509/databases/(default)/operations/ASA0MTAwNTY5MjMJGnRsdWFmZWQHEjFzLXNhLXNib2otbmltZGEQCigS] to finish...
+.............................................................................................done.
+Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (0s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (1s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (2s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (3s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (4s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (5s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (6s) Current status: RUNNING                                                                                     Waiting on bqjob_r713c7d0b79aeb64_00000177fd331dee_1 ... (6s) Current status: DONE   
+Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (0s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (1s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (2s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (3s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (4s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (5s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (6s) Current status: RUNNING                                                                                      Waiting on bqjob_r4392b8c612ebb344_00000177fd33468d_1 ... (6s) Current status: DONE   
+Waiting on bqjob_r1fafcef9b46a838f_00000177fd336f12_1 ... (0s) Current status: RUNNING                                                                                      Waiting on bqjob_r1fafcef9b46a838f_00000177fd336f12_1 ... (1s) Current status: RUNNING                                                                                      Waiting on bqjob_r1fafcef9b46a838f_00000177fd336f12_1 ... (1s) Current status: DONE   
+Number of affected rows: 42
+
+Waiting on bqjob_r52a1a6da8b71b2be_00000177fd337c07_1 ... (0s) Current status: RUNNING                                                                                      Waiting on bqjob_r52a1a6da8b71b2be_00000177fd337c07_1 ... (1s) Current status: RUNNING                                                                                      Waiting on bqjob_r52a1a6da8b71b2be_00000177fd337c07_1 ... (1s) Current status: DONE   
+Number of affected rows: 95
+
+Removing gs://firestore_exports_101/export-01/all_namespaces/kind_client_positions/all_namespaces_kind_client_positions.export_metadata#1614860714971502...
+/ [1 objects]                                                                   Removing gs://firestore_exports_101/export-01/all_namespaces/kind_client_positions/output-0#1614860710432128...
+/ [2 objects]                                                                   Removing gs://firestore_exports_101/export-01/all_namespaces/kind_client_positions/output-1#1614860711073840...
+/ [3 objects]                                                                   Removing gs://firestore_exports_101/export-01/all_namespaces/kind_orders/all_namespaces_kind_orders.export_metadata#1614860714716044...
+/ [4 objects]                                                                   
+==> NOTE: You are performing a sequence of gsutil operations that may
+run significantly faster if you instead use gsutil -m rm ... Please
+see the -m section under "gsutil help options" for further information
+about when gsutil -m can be advantageous.
+
+Removing gs://firestore_exports_101/export-01/all_namespaces/kind_orders/output-0#1614860710203351...
+/ [5 objects]                                                                   Removing gs://firestore_exports_101/export-01/all_namespaces/kind_orders/output-1#1614860710904128...
+/ [6 objects]                                                                   Removing gs://firestore_exports_101/export-01/export-01.overall_export_metadata#1614860715694889...
+/ [7 objects]                                                                   Removing gs://firestore_exports_101/full_export/all_namespaces/kind_client_positions/all_namespaces_kind_client_positions.export_metadata#1614859695244722...
+/ [8 objects]                                                                   Removing gs://firestore_exports_101/full_export/all_namespaces/kind_client_positions/output-0#1614859689304882...
+/ [9 objects]                                                                   Removing gs://firestore_exports_101/full_export/all_namespaces/kind_client_positions/output-1#1614859690279802...
+/ [10 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_orders/all_namespaces_kind_orders.export_metadata#1614859694889134...
+/ [11 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_orders/output-0#1614859688969528...
+/ [12 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_orders/output-1#1614859689955509...
+/ [13 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_admin/all_namespaces_kind_telegram_admin.export_metadata#1614859695367727...
+/ [14 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_admin/output-0#1614859688812893...
+/ [15 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_admin/output-1#1614859689704562...
+/ [16 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_bots/all_namespaces_kind_telegram_bots.export_metadata#1614859695590911...
+/ [17 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_bots/output-0#1614859689749174...
+/ [18 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_bots/output-1#1614859690735570...
+/ [19 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_scan_channels/all_namespaces_kind_telegram_scan_channels.export_metadata#1614859695866203...
+/ [20 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_scan_channels/output-0#1614859689529762...
+/ [21 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_telegram_scan_channels/output-1#1614859690526138...
+/ [22 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_user_details/all_namespaces_kind_user_details.export_metadata#1614859696179139...
+/ [23 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_user_details/output-0#1614859689072540...
+/ [24 objects]                                                                  Removing gs://firestore_exports_101/full_export/all_namespaces/kind_user_details/output-1#1614859690063333...
+/ [25 objects]                                                                  Removing gs://firestore_exports_101/full_export/full_export.overall_export_metadata#1614859696487368...
+/ [26 objects]                                                                  
+==> NOTE: You are performing a sequence of gsutil operations that may
+run significantly faster if you instead use gsutil -m rm ... Please
+see the -m section under "gsutil help options" for further information
+about when gsutil -m can be advantageous.
+
+
+Operation completed over 26 objects.                                             
+/home/turingtrades/turing_trades/export_firestore_data.sh: line 7: firebase: command not found
