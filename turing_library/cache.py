@@ -35,8 +35,6 @@ chat_id=626127126
 class cache():
     def __init__(self):
         #bucket_name = os.environ.get('BUCKET_NAME',                               app_identity.get_default_gcs_bucket_name())
- 
-        
         pass
 
     def get_the_alice_object(self,alice_blue_auto_bot,alice_broker_objects,fs,chat_id):

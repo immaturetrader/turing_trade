@@ -6,3 +6,82 @@ print(t.timeit(5))
 
 t = timeit.Timer(lambda:check_for_the_scrip_new(scrip))
 print(t.timeit(5))
+
+
+
+    def check_for_the_scrip_new(string):
+       scrip_list=pd.read_csv("scrip_list_nse.csv")
+       string=string.strip()
+       print("searching for the scrip",string)
+       scrip_lower = scrip_list['scrip'].str.lower()
+       scrip_lower = scrip_lower.str.replace(" ","")
+       matched_1 = scrip_list.loc[(scrip_list['scrip']  == string)]
+       
+       
+       matched=False
+       #matched_record = matched.to_dict('records')
+       if len(matched_1)==1:
+          matched=True
+          #print(matched_1)
+          return matched_1['scrip'].item(),matched_1['scrip_name'].item()
+       matched_2 = scrip_list.loc[(scrip_list['scrip'].str.lower() == string.lower().replace(" ",""))]
+       if len(matched_2)==1 and not matched:
+          matched=True
+          return str(matched_2['scrip'].item()),str(matched_2['scrip_name'].item())
+       matched_3 = scrip_list.loc[(scrip_list['scrip_name'].str.contains(string,case=False))]
+       if len(matched_3)==1 and not matched:
+          matched=True
+          return str(matched_3['scrip'].item()),str(matched_3['scrip_name'].item())
+        #Fuzzy Search
+       if not matched:
+         print(f"Fuzzy searching the scrip {string}")
+         print("Truncated search strings")
+         scrip_list_t=scrip_list.loc[(scrip_list['scrip_name'].str.contains(pat=f'^{string[0].upper()}[A-Z]',regex=True,case=False))]
+         for i,row in scrip_list_t.iterrows():
+          scrip_name = row['scrip_name']
+          #print("'({})e<=1', '{}'".format(scrip_name,string))
+          ratio=fuzz.partial_ratio(string.lower(),scrip_name.lower().replace(" limited",""))
+          #print("Found an approx match",string,scrip_name,ratio)
+          if ratio > 82:
+             print("Found an approx match",string,scrip_name,ratio)
+             return row['scrip'],scrip_name
+             break
+         return '',''      
+		 
+		 
+		 
+    def check_for_the_scrip(string):
+       scrip_list=pd.read_csv("scrip_list_nse.csv")
+       string=string.strip()
+       print("searching for the scrip",string)
+       scrip_lower = scrip_list['scrip'].str.lower()
+       scrip_lower = scrip_lower.str.replace(" ","")
+       matched_1 = scrip_list.loc[(scrip_list['scrip']  == string)]
+       matched_2 = scrip_list.loc[(scrip_list['scrip'].str.lower() == string.lower().replace(" ",""))]
+       matched_3 = scrip_list.loc[(scrip_list['scrip_name'].str.contains(string,case=False))]
+       matched=False
+       #matched_record = matched.to_dict('records')
+       if len(matched_1)==1:
+          matched=True
+          #print(matched_1)
+          return matched_1['scrip'].item(),matched_1['scrip_name'].item()
+
+       elif len(matched_2)==1 and not matched:
+          matched=True
+          return str(matched_2['scrip'].item()),str(matched_2['scrip_name'].item())
+       elif len(matched_3)==1 and not matched:
+          matched=True
+          return str(matched_3['scrip'].item()),str(matched_3['scrip_name'].item())
+        #Fuzzy Search
+       if not matched:
+         print(f"Fuzzy searching the scrip {string}")
+         for i,row in scrip_list.iterrows():
+          scrip_name = row['scrip_name']
+          #print("'({})e<=1', '{}'".format(scrip_name,string))
+          ratio=fuzz.partial_ratio(string.lower(),scrip_name.lower().replace(" limited",""))
+          #print("Found an approx match",string,scrip_name,ratio)
+          if ratio > 82:
+             print("Found an approx match",string,scrip_name,ratio)
+             return row['scrip'],scrip_name
+             break
+         return '',''		 

@@ -14,23 +14,27 @@ from turing_library.firestore_client import fire_store
 from turing_library.big_query_client import big_query
 from turing_library.extract_order_from_message import order_details
 from turing_library.gcp_pub_sub import pub_sub
-
+import time
 import json
 import requests
+import numpy as np
 
 #print("current directory",os.getcwd())
 new_dir = os.getcwd()
 os.chdir(new_dir)
 fs=fire_store()
 #print("new directory",os.getcwd())
-
-
 # generate string for the session
-
-
 #async with TelegramClient(StringSession(),'1339277', '5fdc451937e250be8997cd103ca4c541',) as client:
 #    print(client.session.save())
 
+def check_for_price_difference(extracted_price,scrip_price):
+    difference=round(scrip_price-extracted_price,2)
+    if scrip_price>0:
+     difference_pct=round((((difference/scrip_price))*100),2)
+    else:
+     difference_pct=99999   
+    return difference,difference_pct
 
 ps_client=pub_sub()
 
@@ -54,8 +58,6 @@ class scan_telegram_channel():
      print("Initializing scan_telegram_channel class")
      self.bq=big_query('66127126')
      self.channel_id=channel_id
-
-
      telegram_creds=fs.fetch_telegram_admin_creds()
      self.api_id = telegram_creds['api_id']
      self.api_hash = telegram_creds['api_hash']
@@ -98,6 +100,8 @@ class scan_telegram_channel():
     print("starting the client")
     client = TelegramClient(StringSession(self.string_session), self.api_id, self.api_hash)
     send_chat_message(626127126,f"started listening to the events of channel {self.channel_id}")
+
+    
     @client.on(events.NewMessage(self.channel_id))
     async def my_event_handler(event):
      print('message received')
@@ -130,6 +134,9 @@ class scan_telegram_channel():
      print(f"Posting the request to the url {url}")
      #print(order.__dict__())
      if order.order_found:
+      price_eq_diff=2
+      price_banknifty_diff=10
+      price_diff_check=price_eq_diff   
       for j_order in order.__dict__():
        print(j_order)
        json_payload = json.dumps(j_order)
@@ -142,15 +149,29 @@ class scan_telegram_channel():
           #json_paylod = { f''' "telegram_message": "{m_message}"'''}
           #client_parameters={"chat_id":param}
        if order.order_found:
+        print("Order Found",order.order_found)   
+        price_diff,price_diff_pct=check_for_price_difference(order_json['order']['ltp'],order_json['order']['price'])
+        print("price difference %",price_diff_pct)
+        print("price difference check",price_diff_check)
+        if order_json['order']['scrip'] in ('NIFTY','BANKNIFTY'):
+           price_diff_check= price_banknifty_diff
+           print("price difference check",price_diff_check)
+        if np.abs(price_diff_pct)<=price_diff_check:   
          #x = requests.post(url, data = json_paylod)
-        send_chat_message('-1001288102699-g',order_json)
-        order_json['order_closed']='N'
-        fs.insert_order(order_json)
-        if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
-         print("publishing message to pub/sub")
-         ps_client.publish_message('telegram_alerts',json_payload,False)
-         print("successfully published message to pub/sub")
-
+          send_chat_message('-1001288102699-g',order_json)
+          order_json['order_closed']='N'
+          fs.insert_order(order_json)
+          if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
+           print("publishing message to pub/sub")
+           ps_client.publish_message('telegram_alerts',json_payload,False)
+           print("successfully published message to pub/sub")
+        else:
+          send_chat_message('-1001288102699-g',order_json)
+          time.sleep(0.3)
+          msg=f"current price is greater than the recommended price by {price_diff_check}% and hence holding this order as difference is {price_diff_pct}%"
+          print(msg)
+          send_chat_message('-1001288102699-g',msg)
+            
        #x = requests.post(url, data = json_paylod)
        #print(f"post request successfully sent to {url}")
        else:
