@@ -364,7 +364,7 @@ class order_details():
         expiry_date = dt_time(2021,3,10)
       #self.nfo_bid_price,self.nfo_ask_price=check_the_price_for_fno(alice,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
        self.nfo_ltp=check_the_price_for_fno_zerodha(kite,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
-      pass
+       pass
 
     def get_orders(self):
         pass
@@ -376,9 +376,9 @@ class order_details():
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         #unsubscribe_if_any('NSE',alice)
         #unsubscribe_if_any('NSE',alice)
-        if expiry_date:
-         if  expiry_date.year == 2021 and expiry_date.month ==3 and expiry_date.day ==11:
-                expiry_date = dt_time(2021,3,10)
+        if self.expiry_date:
+         if  self.expiry_date.year == 2021 and self.expiry_date.month ==3 and self.expiry_date.day ==11:
+                self.expiry_date = dt_time(2021,3,10)
         if self.source == 'telegram' and self.order_found:
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
