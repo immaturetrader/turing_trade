@@ -50,7 +50,7 @@ def get_broker_details(broker):
     table='broker_admin'
     docs = fs.client.collection(table).where(u'broker',u'==','zerodha').stream()
     return [doc.to_dict() for doc in docs][0]
-    
+
 def update_broker_admin_access_token(broker,access_token):
         broker='zerodha'
         table='broker_admin'
@@ -64,8 +64,8 @@ def update_broker_admin_access_token(broker,access_token):
             print("Access token updated successfully in the database")
         else:
             print("No record found in the database")
-            
-            
+
+
 user=get_broker_details('zerodha')
 kite = KiteExt()
 kite.login_with_credentials(
@@ -104,7 +104,7 @@ def event_handler_quote_update(message):
 def open_callback():
     global socket_opened
     socket_opened = True
-    
+
 open_web_socket(alice)
 
 def unsubscribe_if_any(exchange,alice):
@@ -115,32 +115,32 @@ def unsubscribe_if_any(exchange,alice):
     sub_list=[]
     for sub in subs:
         sub_list.append(sub)
-    for sub_i in sub_list:    
-      alice.unsubscribe(sub,LiveFeedType.SNAPQUOTE)  
+    for sub_i in sub_list:
+      alice.unsubscribe(sub,LiveFeedType.SNAPQUOTE)
     symbols=[]
 #    for sub in subs:
-#      alice.unsubscribe(sub, LiveFeedType.SNAPQUOTE)  
+#      alice.unsubscribe(sub, LiveFeedType.SNAPQUOTE)
     #if exchange == 'NSE':
     #alice.unsubscribe([alice.get_instrument_by_symbol('NSE', 'TATASTEEL'), alice.get_instrument_by_symbol('NSE', 'ACC')], LiveFeedType.MARKET_DATA)
 #    while subs:
-#      print("Existing subscriptions present")   
+#      print("Existing subscriptions present")
 #      for sub in subs.keys():
 #       symbols.append(sub.symbol)
-#      for symbol in symbols: 
-#       print(f"Unsubscribing from {symbol}")   
+#      for symbol in symbols:
+#       print(f"Unsubscribing from {symbol}")
 #       alice.unsubscribe(alice.get_instrument_by_symbol(exchange,symbol), LiveFeedType.SNAPQUOTE)
 #     #else:
-         
+
 def check_the_price_from_zerodha(kite,exchange,scrip):
-    
+
     exchange_scrip=exchange + ':' + scrip
     print(f"check the price from zerodha for {exchange_scrip}")
-    ltp=kite.ltp(exchange_scrip)['data'][exchange_scrip]['last_price']    
+    ltp=kite.ltp(exchange_scrip)['data'][exchange_scrip]['last_price']
     print("Ltp from zerodha",ltp)
     return ltp
 
 def check_the_price_for_cash_stock(alice,exchange,scrip):
- print(f"checking the market price for {scrip}")   
+ print(f"checking the market price for {scrip}")
  unsubscribe_if_any(exchange,alice)
  global latest_ask_price
  global latest_bid_price
@@ -152,7 +152,7 @@ def check_the_price_for_cash_stock(alice,exchange,scrip):
  while(socket_opened==False):    # wait till socket open & then subscribe
         #print("# wait till socket open & then subscribe")
         pass
- print("Subscribing to the feed") 
+ print("Subscribing to the feed")
  alice.subscribe(alice.get_instrument_by_symbol(exchange,scrip), LiveFeedType.SNAPQUOTE)
  #time.sleep(0.3)
  dt=datetime.datetime.now()
@@ -171,32 +171,32 @@ def last_thursday_of_month(today):
               lastThuDate = currDate
           currDate += datetime.timedelta(1)
       return lastThuDate
-    
-    
+
+
 def check_the_price_for_fno_zerodha(kite,exchange,scrip,expiry_date,is_fut,strike,is_CE):
  strike=int(strike)
- print(f"checking price for fno in zerodha {exchange},{scrip},{expiry_date},{is_fut},{strike},{is_CE}")   
- 
+ print(f"checking price for fno in zerodha {exchange},{scrip},{expiry_date},{is_fut},{strike},{is_CE}")
+
  instrument=scrip
  if is_fut:
     is_fut='FUT'
  else:
     is_fut=''
-	
+
  if is_CE:
     is_CE='CE'
  else:
     is_CE='PE'
- last_thursday=last_thursday_of_month(dt_time.today())   
+ last_thursday=last_thursday_of_month(dt_time.today())
  print(last_thursday)
  if last_thursday.day == expiry_date.day:
     date=expiry_date.strftime("%B").upper()[:3]
  else:
     if  expiry_date.year == 2021 and expiry_date.month ==3 and expiry_date.day ==11:
         expiry_date = dt_time(2021,3,10)
-    date=f'{expiry_date.month}{expiry_date.day}'     
+    date=f'{expiry_date.month}{expiry_date.day}'
  year=str(expiry_date.year)[2:]
- 
+
  instrument=f'{instrument}{year}{date}{strike}{is_CE}'
  print("instrument name",instrument)
  exchange_scrip=f'{exchange}:{instrument}'
@@ -205,7 +205,7 @@ def check_the_price_for_fno_zerodha(kite,exchange,scrip,expiry_date,is_fut,strik
  return ltp
 
 def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE):
- print(f"checking the market price for {scrip}")   
+ print(f"checking the market price for {scrip}")
  unsubscribe_if_any(exchange,alice)
  global latest_ask_price
  global latest_bid_price
@@ -217,10 +217,10 @@ def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE
  while(socket_opened==False):    # wait till socket open & then subscribe
         #print("# wait till socket open & then subscribe")
         pass
- print("Subscribing to the feed") 
- alice.subscribe(alice.get_instrument_for_fno(symbol = scrip, expiry_date=expiry_date, is_fut=is_fut, strike=strike, is_CE = is_CE), LiveFeedType.SNAPQUOTE)   
-     
- print("Subscribed to the feed") 
+ print("Subscribing to the feed")
+ alice.subscribe(alice.get_instrument_for_fno(symbol = scrip, expiry_date=expiry_date, is_fut=is_fut, strike=strike, is_CE = is_CE), LiveFeedType.SNAPQUOTE)
+
+ print("Subscribed to the feed")
  #time.sleep(0.3)
  dt=datetime.datetime.now()
  if dt.hour > 9 and dt.hour < 16:
@@ -228,14 +228,14 @@ def check_the_price_for_fno(alice,exchange,scrip,expiry_date,is_fut,strike,is_CE
  else:
      time.sleep(0.3)
  return latest_ask_price,latest_bid_price
- 
- 
+
+
 class order_details():
     print("Initialized order details")
     order_found=False
     channel_type = None
     channel = None
-    
+
     channel_id = None
     segment = None
     exchange = None
@@ -252,7 +252,7 @@ class order_details():
     strike=0.0
     market_price=0.0
     expiry_date=[]
-               
+
     order_duration = None
     time = None
     timezone = None
@@ -262,29 +262,29 @@ class order_details():
     message=None
     reply_m_id=0
     reply_to_message=None
-    
+
     scan_name=None
     scan_url=None
     alert_name=None
     webhook_url=None
-    
+
     timezone = time_zone=(strftime("%z", gmtime()))
     time = None
     cash_ask_price=0.0
     cash_bid_price=0.0
     cash_ltp=0.0
-    
+
     nfo_ask_price=0.0
     nfo_bid_price=0.0
     nfo_ltp=0.0
-    
+
     def __init__(self,source):
         try:
             print(kite.profile())
         except:
             print("Unable to get kite profile for the first time, retrying")
             print(kite.profile())
-            
+
         self.source = source
         if self.source == 'chartink':
             self.chartink_order= {
@@ -307,19 +307,19 @@ class order_details():
         self.reply_to_message=str(self.reply_to_message).replace('\n',' ')
         self.reply_to_message=self.reply_to_message.replace('  ',' ')
         self.reply_to_message=str(self.reply_to_message).upper()
-        
-    
- 
+
+
+
     def last_thursday_of_week(self,dt):
-        print("checking for next thursday")   
+        print("checking for next thursday")
         currDate, currMth, currYr = dt, dt.month, dt.year
         for i in range(7):
             if currDate.month == currMth and currDate.year == currYr and currDate.weekday() == 3:
                 #print('dt:'+ str(currDate))
                 lastThuDate = currDate
             currDate += datetime.timedelta(1)
-        return lastThuDate 
-    
+        return lastThuDate
+
     def find_CE_STRIKE(self,symbol):
      regex_expr="\d*\.?\d"
      strike=re.findall(regex_expr,symbol)
@@ -334,25 +334,25 @@ class order_details():
      dt = datetime.datetime.today()
      for ins in all_scripts:
          if ins.expiry.month==dt.month:
- 
+
              if (str(ins.symbol)[-2:]=='CE'):
-                
+
                  strike=self.find_CE_STRIKE(ins.symbol)
-         
+
                  STRIKE_DIFF.append(abs(float(strike[0])-float(price)))
                  DESIRED_SYMBOL.append(ins)
-                  
+
      min_strike_diff=min(STRIKE_DIFF)
      print("min:"+str(min_strike_diff))
      req_index=STRIKE_DIFF.index(min_strike_diff)
      print("req index:"+str(req_index))
      final_desired_symbol=DESIRED_SYMBOL[req_index]
      print("final symbol:"+str(final_desired_symbol))
-     
+
      lowest_strike=self.find_CE_STRIKE(final_desired_symbol.symbol)
      print("symbol:"+str(final_desired_symbol.symbol))
      print("expiry:"+str(final_desired_symbol.expiry))
-         
+
      self.strike=float(lowest_strike[0])
      self.is_CE=True
      #instrument = get_instrument_for_fno(self,symbol=final_desired_symbol.symbol, expiry_date=final_desired_symbol.expiry,is_CE = True, exchange = 'NFO')
@@ -360,13 +360,15 @@ class order_details():
      self.expiry_date = final_desired_symbol.expiry
      instrument=final_desired_symbol
      if self.expiry_date:
+       if  expiry_date.year == 2021 and expiry_date.month ==3 and expiry_date.day ==11:
+        expiry_date = dt_time(2021,3,10)
       #self.nfo_bid_price,self.nfo_ask_price=check_the_price_for_fno(alice,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
-      self.nfo_ltp=check_the_price_for_fno_zerodha(kite,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
+       self.nfo_ltp=check_the_price_for_fno_zerodha(kite,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
       pass
-  
+
     def get_orders(self):
         pass
-    
+
     def __dict__(self):
         #tm=dt_time.now()
         print("getting the order dict")
@@ -374,6 +376,9 @@ class order_details():
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
         #unsubscribe_if_any('NSE',alice)
         #unsubscribe_if_any('NSE',alice)
+        if expiry_date:
+         if  expiry_date.year == 2021 and expiry_date.month ==3 and expiry_date.day ==11:
+                expiry_date = dt_time(2021,3,10)
         if self.source == 'telegram' and self.order_found:
            order_eq={
                 "source": {"telegram" : {"channel_type":self.channel_type,"channel":self.channel,"channel_id":self.channel_id,"m_id":self.m_id,"m_timestamp":self.m_timestamp,"message":self.message,"reply_m_id":self.reply_m_id,"reply_to_message":self.reply_to_message} },
@@ -381,7 +386,7 @@ class order_details():
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }
-           
+
            print("order_eq",order_eq)
            try:
             order_id = kite.place_order(tradingsymbol=self.scrip,
@@ -394,7 +399,7 @@ class order_details():
             print(order_id)
            except:
                pass
-           
+
            if self.segment=='EQ' and not self.is_fut:
                 return [order_eq]
            elif self.exchange == 'NFO' and not self.is_fut:
@@ -406,7 +411,7 @@ class order_details():
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }
                 return [order_opt]
-           elif self.exchange == 'NFO' and self.is_fut:    
+           elif self.exchange == 'NFO' and self.is_fut:
                 self.is_fut=False
                 print(f"getting order for {self.segment} and is_fut {self.is_fut}")
                 order_opt={
@@ -423,51 +428,51 @@ class order_details():
                 "order_duration" : self.order_duration ,
                 "timestamp" :{"time":self.time,"timezone":self.timezone}
                 }]
-                    
-               
+
+
 
         elif self.source == 'chartink':
            self.source = 'chartink'
-           return 
-       
+           return
+
         else:
-            return 
-           
+            return
+
     def check_for_chartink_alert(self,alert):
         num_of_orders=0
         #orders=[]
         #today=dt.datetime.now()
-        
+
         scrips=alert['stocks'].split(',')
         trigger_prices = alert["trigger_prices"].split(',')
         trigger_time_s=alert['triggered_at']
-        
+
         self.chartink_order['source']['chartink']['scan_name']=alert['scan_name']
         self.chartink_order['source']['chartink']['scan_url']=alert['scan_url']
         self.chartink_order['source']['chartink']['alert_name']=alert['alert_name']
         self.chartink_order['source']['chartink']['webhook_url']=alert['webhook_url']
         self.chartink_order['source']['chartink']['m_timestamp']=self.transform_time_string(trigger_time_s)
-        
+
         self.chartink_order['order']['exchange']='NSE'
         scan_data=fs.get_chartink_alert_data(alert['scan_name'])
         if scan_data :
             self.chartink_order['order']['order_type']=scan_data['order_type']
-        
-        
-        
+
+
+
         while num_of_orders<len(scrips):
-               
+
                order=copy.deepcopy(self.chartink_order)
                #orders.append([scrips[num_of_orders],float(trigger_prices[num_of_orders])])
                order['order']['scrip']=scrips[num_of_orders]
                order['order']['price']=float(trigger_prices[num_of_orders])
                order['order']['sl']=round(order['order']['price']*0.99,1)
-               order['order']['transaction_type']='MKT'               
+               order['order']['transaction_type']='MKT'
                num_of_orders=num_of_orders+1
                self.chartink_orders.append(order)
 
-            
-        
+
+
         trigger_time_s=trigger_time_s.replace(' ','')
         print(trigger_time_s)
 
@@ -494,10 +499,10 @@ class order_details():
            trigger_time_adjusted = trigger_time
            return trigger_time_adjusted
         else:
-           #hours_added=-hours_added 
-           trigger_time_adjusted = trigger_time - hours_added  
+           #hours_added=-hours_added
+           trigger_time_adjusted = trigger_time - hours_added
            return trigger_time_adjusted
-        
+
     def check_for_option_order(self,regex_expr):
         params=re.findall(regex_expr,self.message)
         print("checking for option orders")
@@ -515,7 +520,7 @@ class order_details():
                   is_CE=True
                elif params[0][4] == 'PUT':
                   is_CE=False
-                  
+
                self.is_CE = is_CE
                self.sl=float(params[0][6])
                self.order_found=True
@@ -529,7 +534,7 @@ class order_details():
                #self.nfo_ask_price,self.nfo_bid_price=check_the_price_for_fno(alice,self.exchange,self.scrip,self.expiry_date,self.is_fut,self.strike,self.is_CE)
                self.nfo_ltp=check_the_price_for_fno_zerodha(kite,self.exchange,self.scrip,self.expiry_date,self.is_fut,self.strike,self.is_CE)
                #scrip,price,sl,qty,,is_fut,strike,is_CE
-               
+
     def check_for_order(self,regex_expr):
         params=re.findall(regex_expr,self.message)
               #print(params)
@@ -578,9 +583,9 @@ class order_details():
 #              if not self.order_found:
 #               self.check_for_order("(.+)SELL ([A-Z]+ ?[A-Z]+ ?[A-Z]+ ?) @(\d*\.?\d*)-?\d*.?\d* SL (\d*\.?\d*)")
 #               self.transaction_type = 'SELL'
-                 
+
            elif self.channel in ['PATELWEALTH','test26021994']:
-               
+
                 if not self.order_found:
                     print("checking for buy order")
                     self.extract_from_patel_wealth("(.+) (BUY|SELL) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
@@ -594,7 +599,7 @@ class order_details():
                 if not self.order_found:  # check for bank nifty trade
                     print("checking for bank nifty option order")
                     self.check_for_option_order("(.+) (BUY) (NIFTY|BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
-                    #self.transaction_type = 'BUY' 
+                    #self.transaction_type = 'BUY'
                     print(self.__dict__())
 
         else:
@@ -625,7 +630,7 @@ class order_details():
                  self.cash_ltp=check_the_price_from_zerodha(kite,self.exchange,self.scrip)
                  print("order_found",self.order_found)
                  if self.is_fut:
-                    self.check_for_option_for_fut(self.scrip,self.price) 
+                    self.check_for_option_for_fut(self.scrip,self.price)
                 else:
                  self.order_found=False
               else:
@@ -668,8 +673,8 @@ class order_details():
              return row['scrip'],scrip_name
              break
          return '',''
-     
-        
+
+
     def check_for_the_scrip(self,string):
        scrip_list=pd.read_csv("scrip_list_nse.csv")
        string=string.strip()
@@ -677,8 +682,8 @@ class order_details():
        scrip_lower = scrip_list['scrip'].str.lower()
        scrip_lower = scrip_lower.str.replace(" ","")
        matched_1 = scrip_list.loc[(scrip_list['scrip']  == string)]
-       
-       
+
+
        matched=False
        #matched_record = matched.to_dict('records')
        if len(matched_1)==1:
@@ -707,7 +712,7 @@ class order_details():
              print("Found an approx match",string,scrip_name,ratio)
              return row['scrip'],scrip_name
              break
-         return '',''    
+         return '',''
 
 
 def fuzz_search(scrip):
