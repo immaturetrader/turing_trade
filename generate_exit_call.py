@@ -141,7 +141,7 @@ def main():
       if order and order['order']['trade_closed'] == 'N':
        scrip=order['order']['scrip']
        segment=order['order']['segment']
-       target_price=order['order']['bid_price']*0.99  
+       target_price=order['order']['bid_price']*1.05 
        print(f"target price for {scrip} is {target_price} and current price is {scrip_quotes[scrip]['ltp']}")
        if scrip_quotes[scrip]['ltp'] >= target_price:
          print(f"price crossed {target_price}, price : {scrip_quotes[scrip]['ltp']}")

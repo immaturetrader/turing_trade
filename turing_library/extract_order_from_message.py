@@ -280,10 +280,10 @@ class order_details():
 
     def __init__(self,source):
         try:
-            print(kite.profile())
+            kite_prof=kite.profile()
         except:
             print("Unable to get kite profile for the first time, retrying")
-            print(kite.profile())
+            kite_prof==kite.profile()
 
         self.source = source
         if self.source == 'chartink':
@@ -296,7 +296,7 @@ class order_details():
             self.chartink_orders=[]
 
     def clean_message(self):
-        self.message = ' ' + str(self.message)
+        self.message = '. ' + str(self.message)
         self.message=str(self.message).replace('\n',' ')
         self.message=self.message.replace('  ',' ')
         self.message=str(self.message).upper()
@@ -343,15 +343,14 @@ class order_details():
                  DESIRED_SYMBOL.append(ins)
 
      min_strike_diff=min(STRIKE_DIFF)
-     print("min:"+str(min_strike_diff))
      req_index=STRIKE_DIFF.index(min_strike_diff)
-     print("req index:"+str(req_index))
      final_desired_symbol=DESIRED_SYMBOL[req_index]
-     print("final symbol:"+str(final_desired_symbol))
+     #print("final symbol:"+str(final_desired_symbol))
 
      lowest_strike=self.find_CE_STRIKE(final_desired_symbol.symbol)
      print("symbol:"+str(final_desired_symbol.symbol))
      print("expiry:"+str(final_desired_symbol.expiry))
+     print("type expiry:"+str(type(final_desired_symbol.expiry)))
 
      self.strike=float(lowest_strike[0])
      self.is_CE=True
@@ -360,8 +359,6 @@ class order_details():
      self.expiry_date = final_desired_symbol.expiry
      instrument=final_desired_symbol
      if self.expiry_date:
-       if  expiry_date.year == 2021 and expiry_date.month ==3 and expiry_date.day ==11:
-        expiry_date = dt_time(2021,3,10)
       #self.nfo_bid_price,self.nfo_ask_price=check_the_price_for_fno(alice,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
        self.nfo_ltp=check_the_price_for_fno_zerodha(kite,self.exchange,scrip,self.expiry_date,False,self.strike,self.is_CE)
        pass
@@ -371,9 +368,10 @@ class order_details():
 
     def __dict__(self):
         #tm=dt_time.now()
-        print("getting the order dict")
-        print(f"getting order for {self.segment} and is_fut {self.is_fut}")
+        #print("getting the order dict")
+        #print(f"getting order for {self.segment} and is_fut {self.is_fut}")
         self.time=dt_time.now().strftime("%Y-%m-%d %H:%M:%S"+self.time_zone)
+        self.message=self.message[2:]
         #unsubscribe_if_any('NSE',alice)
         #unsubscribe_if_any('NSE',alice)
         if self.expiry_date:
@@ -513,7 +511,7 @@ class order_details():
                self.is_fut=False
                self.order_type=params[0][0]
                self.transaction_type=params[0][1]
-               self.scrip='BANKNIFTY'
+               self.scrip=str(params[0][2]).replace(' ','')
                self.strike=float(params[0][3])
                is_CE=None
                if params[0][4] == 'CALL':
@@ -588,7 +586,7 @@ class order_details():
 
                 if not self.order_found:
                     print("checking for buy order")
-                    self.extract_from_patel_wealth("(.+) (BUY|SELL) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    self.extract_from_patel_wealth("(.+) (BUY|SELL) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* .*? ?S*?L (\d*\.?\d*)")
 #                    self.transaction_type = 'BUY'
 #                print("order_found",self.order_found)
 #                if not self.order_found:
@@ -598,7 +596,7 @@ class order_details():
 #                    print("Sell order found",self.order_found)
                 if not self.order_found:  # check for bank nifty trade
                     print("checking for bank nifty option order")
-                    self.check_for_option_order("(.+) (BUY) (NIFTY|BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* ?S*?L (\d*\.?\d*)")
+                    self.check_for_option_order("(.+) (BUY) (NIFTY|BANK NIFTY) (\d*) (.+) @ ?(\d*\.?\d*)-?\d*.?\d* .*? ?S*?L (\d*\.?\d*)")
                     #self.transaction_type = 'BUY'
                     print(self.__dict__())
 

@@ -134,8 +134,8 @@ class scan_telegram_channel():
      print(f"Posting the request to the url {url}")
      #print(order.__dict__())
      if order.order_found:
-      price_eq_diff=2
-      price_banknifty_diff=10
+      price_eq_diff=2.5
+      price_banknifty_diff=15
       price_diff_check=price_eq_diff   
       for j_order in order.__dict__():
        print(j_order)
@@ -161,7 +161,7 @@ class scan_telegram_channel():
           send_chat_message('-1001288102699-g',order_json)
           order_json['order_closed']='N'
           fs.insert_order(order_json)
-          if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] == 'BANKNIFTY') :
+          if order_json['order']['segment'] == 'EQ' or (order_json['order']['segment'] == 'OPT' and order_json['order']['scrip'] in ['BANKNIFTY','NIFTY']) :
            print("publishing message to pub/sub")
            ps_client.publish_message('telegram_alerts',json_payload,False)
            print("successfully published message to pub/sub")
