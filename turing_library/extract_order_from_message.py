@@ -42,7 +42,7 @@ from turing_library.alice_blue_execution import alice_blue_execution
 chat_id=626127126
 alice_admin=alice_blue_execution(fs,chat_id)
 
-user_details=fs.fetch_user_creds(chat_id)
+user_details=fs.broker_admin_creds('aliceblue')
 scrip_market_data = {}
 alice=alice_admin.generate_client(username=user_details['client_id'].upper(), password=user_details['password'], twoFA=user_details['twoFA'],  api_secret=user_details['api_secret'],access_token=user_details['access_token'],app_id=user_details['app_id'],master_contracts_to_download=['NSE','NFO'])
 
@@ -74,6 +74,9 @@ print(kite.profile())
 
 from time import gmtime, strftime
 
+def get_symbol_token(exchange,scrip):
+    return alice.get_instrument_by_symbol(exchange,scrip).token
+    
 def open_web_socket(alice):
   global socket_opened
   socket_opened = False
@@ -431,7 +434,13 @@ class order_details():
 
         elif self.source == 'chartink':
            self.source = 'chartink'
-           return
+           order_eq={
+                "source": {"chartink" : {"scan_name":self.scan_name,"scan_url":self.scan_url,"alert_name":self.alert_name,"webhook_url":self.webhook_url,"m_timestamp":self.m_timestamp,"message":self.message} },
+                "order": { "segment":'EQ',"exchange":'NSE',"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"ltp":self.cash_ltp,"bid_price":self.cash_bid_price,"ask_price":self.cash_ask_price,"trade_closed":"N"},
+                "order_duration" : self.order_duration ,
+                "timestamp" :{"time":self.time,"timezone":self.timezone}
+                }
+           return order_eq
 
         else:
             return
@@ -440,39 +449,69 @@ class order_details():
         num_of_orders=0
         #orders=[]
         #today=dt.datetime.now()
-
+        print("Checking for chartink alerts")
         scrips=alert['stocks'].split(',')
         trigger_prices = alert["trigger_prices"].split(',')
         trigger_time_s=alert['triggered_at']
 
+#        self.chartink_order['source']['chartink']['scan_name']=alert['scan_name']
+#        self.chartink_order['source']['chartink']['scan_url']=alert['scan_url']
+#        self.chartink_order['source']['chartink']['alert_name']=alert['alert_name']
+#        self.chartink_order['source']['chartink']['webhook_url']=alert['webhook_url']
+        self.scan_name=alert['scan_name']
+        self.scan_url=alert['scan_url']
+        self.alert_name=alert['alert_name']
+        self.webhook_url=alert['webhook_url']
+        
+        
+        time_stamp=self.transform_time_string(trigger_time_s)
+        self.chartink_order['source']['chartink']['m_timestamp']=time_stamp.strftime("%Y-%m-%d %H:%M:%S")
         self.chartink_order['source']['chartink']['scan_name']=alert['scan_name']
         self.chartink_order['source']['chartink']['scan_url']=alert['scan_url']
         self.chartink_order['source']['chartink']['alert_name']=alert['alert_name']
         self.chartink_order['source']['chartink']['webhook_url']=alert['webhook_url']
-        self.chartink_order['source']['chartink']['m_timestamp']=self.transform_time_string(trigger_time_s)
+        self.chartink_order['order']['segment']='EQ'
+        self.chartink_order['order_duration']='INTRADAY'
+        self.chartink_order['timestamp']['time']=time_stamp.strftime("%Y-%m-%d %H:%M:%S")
+        
 
         self.chartink_order['order']['exchange']='NSE'
         scan_data=fs.get_chartink_alert_data(alert['scan_name'])
         if scan_data :
             self.chartink_order['order']['order_type']=scan_data['order_type']
 
-
-
         while num_of_orders<len(scrips):
 
                order=copy.deepcopy(self.chartink_order)
                #orders.append([scrips[num_of_orders],float(trigger_prices[num_of_orders])])
                order['order']['scrip']=scrips[num_of_orders]
+               self.scrip=scrips[num_of_orders]
+               self.chartink_order['order']['order_type']=scan_data['order_type']
                order['order']['price']=float(trigger_prices[num_of_orders])
                order['order']['sl']=round(order['order']['price']*0.99,1)
-               order['order']['transaction_type']='MKT'
-               num_of_orders=num_of_orders+1
+               order['order']['transaction_type']='BUY'
+               self.transaction_type='BUY'
+               self.order_type=scan_data['order_type']
+               order['order']['symbol_token']=get_symbol_token(self.chartink_order['order']['exchange'],order['order']['scrip'])
                self.chartink_orders.append(order)
+               
+               if alert['scan_name'] == 'Buy on dips':
 
-
+                  self.check_for_option_for_fut(order['order']['scrip'],order['order']['price']) 
+                  self.chartink_option_order= {
+                "source": {"chartink" : {"scan_name":self.scan_name,"scan_url":self.scan_url,"alert_name":self.alert_name,"webhook_url":self.webhook_url,"m_timestamp":self.m_timestamp} },
+                "order": { "segment":'OPT',"exchange":self.exchange,"scrip":self.scrip,"transaction_type":self.transaction_type,"order_type":self.order_type,"price":self.price,"sl":self.sl,"target":self.target,"is_fut":self.is_fut,"strike":self.strike,"expiry_date":[self.expiry_date.year,self.expiry_date.month,self.expiry_date.day ],"is_CE":self.is_CE,"ltp":self.nfo_ltp,"bid_price":self.nfo_bid_price,"ask_price":self.nfo_ask_price,"trade_closed":"N"},
+                "order_duration" : self.order_duration ,
+                "timestamp" :{"time":self.time,"timezone":self.timezone}
+                    }
+                  option_order=copy.deepcopy(self.chartink_option_order) 
+                  self.chartink_orders.append(option_order) 
+               num_of_orders=num_of_orders+1
+               
 
         trigger_time_s=trigger_time_s.replace(' ','')
         print(trigger_time_s)
+        print(self.chartink_orders)
 
 
     def transform_time_string(self,trigger_time_s):

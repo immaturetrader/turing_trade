@@ -1,0 +1,50 @@
+from smartapi import SmartConnect
+
+obj=SmartConnect(api_key="X4iDD8xI")
+username='R381604'
+pwd='497666124153'
+data = obj.generateSession(username,pwd)
+
+par={"variety": "NORMAL", "tradingsymbol": "HDFCBANK-EQ", "symboltoken": "1333", "transactiontype": "BUY", "exchange": "NSE", "ordertype": "MARKET", "producttype": "INTRADAY", "duration": "DAY", "price": "0.0", "squareoff": "0", "stoploss": "0", "quantity": "1"}
+
+try:
+    orderparams = {
+        "variety": "NORMAL",
+        "tradingsymbol": "SBIN-EQ",
+        "symboltoken": "3045",
+        "transactiontype": "BUY",
+        "exchange": "NSE",
+        "ordertype": "MARKET",
+        "producttype": "INTRADAY",
+        "duration": "DAY",
+        "price": "0.0",
+        "squareoff": "0",
+        "stoploss": "0",
+        "quantity": "1"
+        }
+    orderId=obj.placeOrder(orderparams)
+    
+    
+    print("The order id is: {}".format(orderId))
+except Exception as e:
+    print("Order placement failed: {}".format(e.message))
+	
+	
+orderparams = {
+        "variety": "STOPLOSS",
+        "tradingsymbol": "SBIN-EQ",
+        "symboltoken": "3045",
+        "transactiontype": "SELL",
+        "exchange": "NSE",
+        "ordertype": "STOPLOSS_MARKET",
+        "producttype": "INTRADAY",
+        "duration": "DAY",
+		"triggerprice": "359.8",	
+		"price": "0",
+        "squareoff": "0",
+        "stoploss": "0",
+        "quantity": "1"
+        }
+orderId=obj.placeOrder(orderparams)
+
+obj.cancelOrder('210511000111340','STOPLOSS')

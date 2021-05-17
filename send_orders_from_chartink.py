@@ -36,6 +36,18 @@ from turing_library.firestore_client import fire_store
 # Initialising global variables
 ps_client=pub_sub()
 
+bot_token = '1021528417:AAGAkVTbfg11PfEYcBflltMg1vT0SiOnK4E'
+TelegramBot = telepot.Bot(bot_token)
+
+def send_chat_message(chat_id,text):
+    try:
+     TelegramBot.sendMessage(chat_id=chat_id, text=text)
+     return "Success"
+    except:
+     print("Error while sending the message, retrying again")
+     TelegramBot.sendMessage(chat_id=chat_id, text=text)
+     return "Success"
+ 
 global chat_id
 chat_id = '626127126'
 data='Test'
@@ -58,19 +70,25 @@ def publish_chartink_alert_to_pub_sub():
        print("data",data)
        print("data type",type(data))
        json_data=json.loads(data)
-       print("publishing the chartink order message to pubsub")
+       print("json data",json)
        #data = data_str.encode("utf-8")
        #ps_client.publish_message('chart_ink_alerts',data,False)
        orders=order_details('chartink')
        orders.check_for_chartink_alert(json_data)
+       
        for order in orders.chartink_orders:
            print(order)
+           print("publishing the chartink order message to pubsub")
+           send_chat_message('-1001392962142',order)
+           #data = order.encode("utf-8")
+           ps_client.publish_message('algo',str(order).replace("'",'"'),False)
        #future = publisher.publish(topic_path, data)
        #print(future.result())
        print("post request successfully sent")
        return "OK",200
    except Exception as e:
        print("Error",e)
+       return "OK",200
      
     
  

@@ -139,6 +139,12 @@ class fire_store():
         return [doc.to_dict() for doc in docs][0]
 #        for doc in docs:
 #            print(doc.to_dict())
+        
+    def broker_admin_creds(self,broker):
+        docs = self.client.collection('broker_admin').where(u'broker',u'==',broker).stream()
+        #docs = self.client.collection(self.telegram_admin_table).stream()
+        #return [{'api_hash':doc.to_dict()['api_hash']} for doc in docs]
+        return [doc.to_dict() for doc in docs][0]
 
     def fetch_channel_details_to_be_scanned(self):
         docs = self.client.collection(self.telegram_scan_channels).where(u'scan',u'==','Y').stream()

@@ -59,17 +59,6 @@ class cache():
                 alice_broker_objects[chat_id]=alice_gcp
                 return alice_gcp,alice_broker_objects            
             
-#             elif path.exists(f"{chat_id}.alice"):
-#                alice_file=open(f'{chat_id}.alice','rb')
-#                
-#                alice_dill=dill.load(alice_file)
-#                alice_file.close()
-#                print("trying to get profile from existing alice dill object")
-#                alice_dill.get_profile()
-#                print("able to get profile from existing alice dill object")
-#                alice_broker_objects[chat_id]=alice_dill
-#                return alice_dill,alice_broker_objects
-            
              else:
                print("alice user object not present generating")
                user_details=self.fs.fetch_user_creds(chat_id)
@@ -109,6 +98,10 @@ class cache():
                 pass   
                 #send_chat_message("User not registered or unable to get profile details")
 
+
+
+    def get_the_kite_object(self,alice_blue_auto_bot,alice_broker_objects,fs,chat_id):
+        pass
 #try:
 #    obj.get_profile()
 #except requests.exceptions.HTTPError as e:

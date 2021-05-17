@@ -137,7 +137,7 @@ def execute_orders_from_telegram():
     if segment == 'EQ':
      alice_blue_auto_bot.place_order(alice,json_data['order']['transaction_type'],'MKT',scrip,0.0,json_data['order']['sl'],qty)
      send_chat_message(chat_id,f"Buy order placed successfully for the scrip {scrip}")
-    elif segment == 'OPT' and scrip == 'BANKNIFTY':
+    elif segment == 'OPT' and scrip in ['BANKNIFTY','NIFTY']:
      expiry_date_list=json_data['order']['expiry_date']
      print(expiry_date_list)
      expiry_date=dt.date(expiry_date_list[0],expiry_date_list[1],expiry_date_list[2])
