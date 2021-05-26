@@ -69,11 +69,11 @@ alice_broker_objects={}
 
 users = fs.get_all_user_chats()    
 
-user_details=[(user['chat_id'],user['trigger_orders']) for user in users if 'trigger_orders' in user.keys()]
+user_details=[(user['chat_id'],user['trigger_orders'],user['broker']) for user in users if 'trigger_orders' in user.keys()]
 
 for user in user_details:
     chat_id=user[0]
-    if user[1]=='Y':
+    if user[1]=='Y' and user[2]=='aliceblue':
      alice_blue_auto_bot=alice_blue_execution(fs,chat_id)
      alice,alice_broker_objects=cache.get_the_alice_object(alice_blue_auto_bot,alice_broker_objects,fs,chat_id)
      
