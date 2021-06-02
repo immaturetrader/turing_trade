@@ -1,0 +1,179 @@
+[33mcommit 3688e9d1ca5ccbcb088d8395bb274f8a326a2a43[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Sai Kiran <sai.kiran0901@gmail.com>
+Date:   Mon May 31 12:15:56 2021 +0530
+
+    squareoff
+
+[33mcommit 719714da096f0f14a11111b1afe30d8eb01ba1cf[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed May 26 16:37:33 2021 +0530
+
+    cache
+
+[33mcommit a8cf988bd6a954d1b6461e43cbde7c5f4f3a7fcf[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed May 26 16:28:53 2021 +0530
+
+    update client positions
+
+[33mcommit a1e13d59741b5092cdf63d28ab218f808699c4df[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed May 26 16:22:46 2021 +0530
+
+    cloud bot
+
+[33mcommit 72726f4d5f3891d6d61bc8eaad5848d4830c499c[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Tue May 18 00:55:55 2021 +0530
+
+    added angel broking
+
+[33mcommit 6f2d76a733b9042cddf3a808c18cc65266ffc352[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Mar 21 17:26:01 2021 +0530
+
+    regex "strict" change
+
+[33mcommit af6d63875fe484f852a337e607346b4471e14570[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Mar 8 21:09:03 2021 +0530
+
+    kite change
+
+[33mcommit 931208b8988e773539b1bc2c3ccf826d9b842928[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Mar 8 20:51:34 2021 +0530
+
+    expiry change
+
+[33mcommit 33ca1d4254e9388efef93c20cb14ee033e0a787e[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Mar 8 18:45:50 2021 +0530
+
+    kite zerodha code
+
+[33mcommit e10c7be694c6dc24b0e67f8dd20f5b9affef61ee[m
+Author: Sai Kiran <saikiran@github.com>
+Date:   Fri Mar 5 15:29:23 2021 +0000
+
+    push from linux
+
+[33mcommit 3bc08ada5b63e2708bae7b5a9be9dcc41b11d7e4[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Mar 1 15:09:36 2021 +0530
+
+    updated client positions
+
+[33mcommit 8eaa45a684b8df4dbaf631dfeda8a9322ff421d9[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Thu Feb 25 12:29:54 2021 +0530
+
+    try except block for sending message
+
+[33mcommit 7620ca62a8bce0a3092d3d020856d3d51002faa6[m
+Author: Sai Kiran <saikiran@github.com>
+Date:   Tue Feb 23 11:11:45 2021 +0000
+
+    change from Linux
+
+[33mcommit f53ff582d89fa13570883b7ac6cd144b68766997[m
+Author: Sai Kiran <saikiran@github.com>
+Date:   Tue Feb 23 11:10:50 2021 +0000
+
+    change from Linux
+
+[33mcommit 720a19af373bc8841c0d30b6a21840e1a0820721[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Tue Feb 23 13:38:41 2021 +0530
+
+    fixed the normal message issue
+
+[33mcommit 830c5e7caa17300665a2744f1cb263eeb87ac427[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Feb 22 23:54:23 2021 +0530
+
+    change
+
+[33mcommit 3fee54fe2a2931998097385aad5e3e87161941d6[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Feb 21 12:05:55 2021 +0530
+
+    update cache
+
+[33mcommit 3c6c8eda6b4b66b3b1614ede9d63d80ff70e5dfa[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Feb 21 11:21:06 2021 +0530
+
+    cache
+
+[33mcommit 147eb8919f7635ccb0db0329efa2065223a8b1db[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Feb 21 11:17:36 2021 +0530
+
+    change
+
+[33mcommit 50b53bb43076357adb25e92be2e43f075b42a804[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Feb 21 10:44:38 2021 +0530
+
+    change
+
+[33mcommit 1be88d5209ea7db2a1868b172d1f601403dde7c0[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sun Feb 21 10:41:06 2021 +0530
+
+    change
+
+[33mcommit 215c22cfbc91b8efb44a262764a48195b3653fe6[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Thu Feb 18 01:59:35 2021 +0530
+
+    change
+
+[33mcommit 8b334d56f56e3c5689612854da21887b6acee7ab[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed Feb 17 00:36:42 2021 +0530
+
+    ss
+
+[33mcommit 198effe2af2d7ce6229861b7efbc49c5a6f7e82e[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed Feb 17 00:36:27 2021 +0530
+
+    Signed-off-by: saikiran0901 <sai.kiran0901@gmail.com>
+
+[33mcommit 15cf25d78f6d028c420b277c691c76bb28656791[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sat Feb 6 14:35:46 2021 +0530
+
+    change
+
+[33mcommit c4868fcfadd7e87483d18c0bc2ce89a8b758cfe6[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Mon Feb 1 20:50:46 2021 +0530
+
+    bot change
+
+[33mcommit 979987b1b6a7a0b3755d6fb7b2f9cae8c4fbb45e[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Sat Jan 30 01:42:17 2021 +0530
+
+    change in libraries and planetpythonbot
+
+[33mcommit 46fcf501e229aa91c0d587eb973e91b082dc6eae[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed Jan 27 22:48:46 2021 +0530
+
+    changes
+
+[33mcommit 3a74c48df8b8f275ddb7d0485497e3b7b5365c63[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed Jan 27 21:07:02 2021 +0530
+
+    change
+
+[33mcommit 15524d0c0a7607a4c42bcd98e1410bdb987612fd[m
+Author: saikiran0901 <sai.kiran0901@gmail.com>
+Date:   Wed Jan 27 20:58:07 2021 +0530
+
+    First commit
