@@ -655,7 +655,7 @@ class order_details():
                 self.scrip=params[0][2]
                 if 'FUT' in self.scrip:
                    self.is_fut=True
-                self.scrip=self.scrip.replace('ON NSE CASH','').replace('FUT','').replace('CASH','').replace('/','').strip()
+                self.scrip=self.scrip.replace('ON NSE','').replace('ON NSE CASH','').replace('FUT','').replace('CASH','').replace('/','').strip()
                 if self.scrip:
                  nse_scrip,nse_scrip_name=self.check_for_the_scrip(self.scrip)
                 self.price=float(params[0][3])
