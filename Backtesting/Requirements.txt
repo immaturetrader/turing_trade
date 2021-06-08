@@ -1,0 +1,5 @@
+backtesting
+talib
+matplotlib
+pandas
+numpy
